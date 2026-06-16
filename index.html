@@ -6,171 +6,87 @@
 <title>Dra. Catalina Campos — Sistema Dental</title>
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #ffffff; --bg2: #f7f7f5; --bg3: #f0efe9;
-  --text: #1a1a1a; --text2: #666; --text3: #999;
-  --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.22);
-  --gold: #b8952a; --gold-bg: #fdf8ee;
-  --success: #1a7a4a; --success-bg: #eaf3de;
-  --danger: #a32d2d; --danger-bg: #fcebeb;
-  --info: #185fa5; --info-bg: #e6f1fb;
-  --warn: #7a5a00; --warn-bg: #fff8e1;
-  --radius: 8px; --radius-lg: 12px;
-  --sidebar: 220px;
-}
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 14px; color: var(--text); background: var(--bg3); min-height: 100vh; display: flex; }
-
-/* SIDEBAR */
-.sidebar { width: var(--sidebar); background: var(--bg); border-right: 0.5px solid var(--border2); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100; }
-.sidebar-logo { padding: 1.25rem 1rem 1rem; border-bottom: 0.5px solid var(--border); }
-.sidebar-logo .name { font-size: 13px; font-weight: 600; color: var(--gold); }
-.sidebar-logo .title { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.sidebar-nav { flex: 1; padding: 0.75rem 0; overflow-y: auto; }
-.nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 16px; cursor: pointer; font-size: 13px; color: var(--text2); border-left: 2px solid transparent; transition: all 0.1s; }
-.nav-item:hover { background: var(--bg2); color: var(--text); }
-.nav-item.active { background: var(--gold-bg); color: var(--gold); border-left-color: var(--gold); font-weight: 500; }
-.nav-icon { font-size: 16px; width: 20px; text-align: center; }
-.sync-status { padding: 10px 16px; font-size: 11px; border-top: 0.5px solid var(--border); color: var(--text3); }
-
-/* MAIN */
-.main { margin-left: var(--sidebar); flex: 1; min-height: 100vh; }
-.topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; }
-.topbar-title { font-size: 16px; font-weight: 500; }
-.page { padding: 1.5rem 1.5rem; display: none; }
-.page.active { display: block; }
-
-/* COMPONENTS */
-label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 4px; }
-input[type=text], input[type=number], input[type=date], input[type=time], input[type=email], select, textarea {
-  width: 100%; padding: 8px 10px; border: 0.5px solid var(--border2); border-radius: var(--radius);
-  background: var(--bg); color: var(--text); font-size: 13px; font-family: inherit; outline: none;
-}
-input:focus, select:focus, textarea:focus { border-color: var(--gold); }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
-.field { margin-bottom: 12px; }
-.card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; margin-bottom: 1rem; }
-.section-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 14px; }
-.btn { padding: 8px 14px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); cursor: pointer; font-size: 13px; color: var(--text); font-family: inherit; }
-.btn:hover { background: var(--bg2); }
-.btn:active { transform: scale(0.98); }
-.btn-gold { background: var(--gold); color: #fff; border-color: var(--gold); }
-.btn-gold:hover { opacity: 0.88; background: var(--gold); }
-.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-.btn-primary:hover { opacity: 0.82; background: var(--text); }
-.btn-sm { padding: 5px 10px; font-size: 12px; }
-.btn-danger { color: var(--danger); border-color: rgba(163,45,45,0.3); }
-.btn-danger:hover { background: var(--danger-bg); }
-.btn-success { background: var(--success); color: #fff; border-color: var(--success); }
-.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-.badge-gold { background: var(--gold-bg); color: var(--gold); }
-.badge-success { background: var(--success-bg); color: var(--success); }
-.badge-danger { background: var(--danger-bg); color: var(--danger); }
-.badge-info { background: var(--info-bg); color: var(--info); }
-.table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.table th { text-align: left; font-size: 11px; font-weight: 600; color: var(--text2); padding: 7px 10px; border-bottom: 0.5px solid var(--border2); text-transform: uppercase; letter-spacing: 0.04em; }
-.table td { padding: 9px 10px; border-bottom: 0.5px solid var(--border); }
-.table tr:last-child td { border-bottom: none; }
-.table tr:hover td { background: var(--bg2); }
-.empty-state { text-align: center; padding: 3rem; color: var(--text3); font-size: 13px; }
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; display: none; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--bg); border-radius: var(--radius-lg); padding: 1.5rem; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
-.modal-title { font-size: 16px; font-weight: 500; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
-.toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: var(--radius); font-size: 13px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 999; }
-.toast.show { opacity: 1; }
-textarea { resize: vertical; }
-.search-bar { position: relative; margin-bottom: 14px; }
-.search-bar input { padding-left: 32px; }
-.search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text3); pointer-events: none; }
-
-/* PATIENT CARD */
-.patient-row { display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: var(--radius); cursor: pointer; border-bottom: 0.5px solid var(--border); }
-.patient-row:hover { background: var(--bg2); }
-.patient-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--gold-bg); color: var(--gold); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; flex-shrink: 0; }
-.patient-name { font-size: 13px; font-weight: 500; }
-.patient-sub { font-size: 11px; color: var(--text3); margin-top: 1px; }
-
-/* TABS */
-.tab-row { display: flex; gap: 2px; border-bottom: 0.5px solid var(--border); margin-bottom: 1.25rem; }
-.tab-btn { padding: 8px 14px; font-size: 13px; cursor: pointer; border: none; background: none; color: var(--text2); border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
-.tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 500; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
-
-/* AGENDA */
-.agenda-header { display: grid; grid-template-columns: 60px repeat(5,1fr); gap: 1px; background: var(--border); border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
-.agenda-cell-head { background: var(--bg2); padding: 8px; text-align: center; font-size: 12px; font-weight: 500; }
-.agenda-body { display: grid; grid-template-columns: 60px repeat(5,1fr); gap: 1px; background: var(--border); border-radius: 0 0 var(--radius) var(--radius); overflow: hidden; }
-.agenda-time { background: var(--bg2); padding: 6px 8px; font-size: 11px; color: var(--text3); text-align: right; display: flex; align-items: flex-start; justify-content: flex-end; }
-.agenda-slot { background: var(--bg); min-height: 30px; cursor: pointer; position: relative; transition: background 0.1s; }
-.agenda-slot:hover { background: var(--gold-bg); }
-.agenda-event { position: absolute; inset: 1px; border-radius: 4px; padding: 3px 6px; font-size: 11px; font-weight: 500; overflow: hidden; cursor: pointer; }
-.agenda-event.cita { background: var(--info-bg); color: var(--info); border-left: 3px solid var(--info); }
-.agenda-event.bloqueo { background: var(--bg3); color: var(--text3); border-left: 3px solid var(--text3); }
-.clinic-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
-.clinic-chip { padding: 5px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; border: 0.5px solid var(--border2); background: var(--bg); color: var(--text2); }
-.clinic-chip.selected { background: var(--gold); color: #fff; border-color: var(--gold); }
-
-/* BUDGET LINES */
-.bh-row { display: grid; grid-template-columns: 2.3fr 60px 68px 95px 30px; gap: 6px; padding-bottom: 6px; font-size: 11px; color: var(--text2); font-weight: 500; border-bottom: 0.5px solid var(--border); margin-bottom: 8px; }
-.b-line { display: grid; grid-template-columns: 2.3fr 60px 68px 95px 30px; gap: 6px; align-items: center; margin-bottom: 7px; }
-.b-line input[type=number] { padding: 5px 6px; text-align: center; }
-.lo { font-size: 11px; color: var(--text3); text-decoration: line-through; }
-.lf { font-size: 13px; font-weight: 500; }
-.lf.disc { color: var(--success); }
-.totals-row { display: flex; justify-content: flex-end; gap: 2rem; padding: 10px 0 0; border-top: 0.5px solid var(--border); margin-top: 4px; }
-
-/* PDF TEMPLATE */
-.pdf-template { display: none; }
-.pdf-doc { width: 794px; padding: 48px 52px; font-family: Arial, sans-serif; font-size: 13px; color: #222; background: #fff; }
-.pdf-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 2px solid #b8952a; margin-bottom: 20px; }
-.pdf-logo-text { font-size: 22px; font-weight: 700; color: #b8952a; letter-spacing: 0.03em; }
-.pdf-logo-sub { font-size: 12px; color: #888; margin-top: 3px; letter-spacing: 0.08em; text-transform: uppercase; }
-.pdf-meta { text-align: right; font-size: 12px; color: #666; line-height: 1.7; }
-.pdf-budget-title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; text-align: center; }
-.pdf-section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #b8952a; margin-bottom: 8px; margin-top: 20px; border-bottom: 0.5px solid #e8d9a0; padding-bottom: 4px; }
-.pdf-patient-box { background: #fdf8ee; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; }
-.pdf-patient-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.pdf-patient-info { font-size: 12px; color: #666; }
-.pdf-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
-.pdf-table th { background: #b8952a; color: #fff; padding: 8px 10px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-.pdf-table td { padding: 8px 10px; border-bottom: 0.5px solid #eee; font-size: 13px; }
-.pdf-table tr:last-child td { border-bottom: none; }
-.pdf-totals { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd; }
-.pdf-total-row { display: flex; justify-content: space-between; width: 240px; font-size: 13px; }
-.pdf-total-final { font-size: 16px; font-weight: 700; padding-top: 8px; border-top: 1.5px solid #b8952a; margin-top: 4px; }
-.pdf-convenio { font-size: 12px; color: #666; margin-top: 16px; padding: 8px 12px; background: #f5f5f5; border-radius: 4px; }
-.pdf-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px; }
-.pdf-sign-line { border-top: 1px solid #999; padding-top: 6px; font-size: 12px; color: #666; text-align: center; }
-.pdf-footer { margin-top: 32px; padding-top: 12px; border-top: 0.5px solid #ddd; font-size: 11px; color: #999; text-align: center; }
-.pdf-number { font-size: 13px; font-weight: 600; color: #b8952a; }
-
-/* ABONOS */
-.abono-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
-.abono-row:last-child { border-bottom: none; }
-
-/* EVOLUCION */
-.evol-row { padding: 10px 12px; border-left: 3px solid var(--gold); background: var(--gold-bg); border-radius: 0 var(--radius) var(--radius) 0; margin-bottom: 8px; }
-.evol-date { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
-.evol-clinic { font-size: 11px; color: var(--gold); font-weight: 500; margin-bottom: 4px; }
-.evol-text { font-size: 13px; }
-
-@media (max-width: 768px) {
-  .sidebar { transform: translateX(-100%); transition: transform 0.2s; }
-  .sidebar.open { transform: translateX(0); }
-  .main { margin-left: 0; }
-  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
-  .bh-row, .b-line { grid-template-columns: 1.6fr 50px 56px 82px 26px; gap: 4px; }
-  .page { padding: 1rem; }
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#fff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a1a;--text2:#666;--text3:#999;--border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.22);--gold:#b8952a;--gold-bg:#fdf8ee;--success:#1a7a4a;--success-bg:#eaf3de;--danger:#a32d2d;--danger-bg:#fcebeb;--info:#185fa5;--info-bg:#e6f1fb;--warn:#7a5a00;--warn-bg:#fff8e1;--radius:8px;--radius-lg:12px;--sidebar:220px;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg3);min-height:100vh;display:flex;}
+.sidebar{width:var(--sidebar);background:var(--bg);border-right:0.5px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;}
+.sidebar-logo{padding:1.25rem 1rem 1rem;border-bottom:0.5px solid var(--border);}
+.sidebar-logo .name{font-size:13px;font-weight:600;color:var(--gold);}
+.sidebar-logo .title{font-size:11px;color:var(--text3);margin-top:2px;}
+.sidebar-nav{flex:1;padding:0.75rem 0;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;font-size:13px;color:var(--text2);border-left:2px solid transparent;transition:all 0.1s;}
+.nav-item:hover{background:var(--bg2);color:var(--text);}
+.nav-item.active{background:var(--gold-bg);color:var(--gold);border-left-color:var(--gold);font-weight:500;}
+.nav-icon{font-size:16px;width:20px;text-align:center;}
+.sync-status{padding:10px 16px;font-size:11px;border-top:0.5px solid var(--border);color:var(--text3);}
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh;}
+.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-title{font-size:16px;font-weight:500;}
+.page{padding:1.5rem;display:none;}
+.page.active{display:block;}
+label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=email],select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.field{margin-bottom:12px;}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
+.section-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;}
+.btn{padding:8px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;}
+.btn:hover{background:var(--bg2);}
+.btn:active{transform:scale(0.98);}
+.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold);}
+.btn-gold:hover{opacity:0.88;background:var(--gold);}
+.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text);}
+.btn-sm{padding:5px 10px;font-size:12px;}
+.btn-danger{color:var(--danger);border-color:rgba(163,45,45,0.3);}
+.btn-danger:hover{background:var(--danger-bg);}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
+.badge-gold{background:var(--gold-bg);color:var(--gold);}
+.badge-success{background:var(--success-bg);color:var(--success);}
+.badge-danger{background:var(--danger-bg);color:var(--danger);}
+.table{width:100%;border-collapse:collapse;font-size:13px;}
+.table th{text-align:left;font-size:11px;font-weight:600;color:var(--text2);padding:7px 10px;border-bottom:0.5px solid var(--border2);text-transform:uppercase;letter-spacing:0.04em;}
+.table td{padding:9px 10px;border-bottom:0.5px solid var(--border);}
+.table tr:last-child td{border-bottom:none;}
+.table tr:hover td{background:var(--bg2);}
+.empty-state{text-align:center;padding:3rem;color:var(--text3);font-size:13px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--bg);border-radius:var(--radius-lg);padding:1.5rem;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:16px;font-weight:500;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:var(--bg);padding:10px 18px;border-radius:var(--radius);font-size:13px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;}
+textarea{resize:vertical;}
+.search-bar{position:relative;margin-bottom:14px;}
+.search-bar input{padding-left:32px;}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;}
+.patient-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);cursor:pointer;border-bottom:0.5px solid var(--border);}
+.patient-row:hover{background:var(--bg2);}
+.patient-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-bg);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;flex-shrink:0;}
+.patient-name{font-size:13px;font-weight:500;}
+.patient-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.tab-row{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;flex-wrap:wrap;}
+.tab-btn{padding:8px 14px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.clinic-chip{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);margin-right:6px;margin-bottom:6px;display:inline-block;}
+.bh-row{display:grid;grid-template-columns:2.3fr 60px 68px 95px 30px;gap:6px;padding-bottom:6px;font-size:11px;color:var(--text2);font-weight:500;border-bottom:0.5px solid var(--border);margin-bottom:8px;}
+.b-line{display:grid;grid-template-columns:2.3fr 60px 68px 95px 30px;gap:6px;align-items:center;margin-bottom:7px;}
+.lo{font-size:11px;color:var(--text3);text-decoration:line-through;}
+.lf{font-size:13px;font-weight:500;}
+.lf.disc{color:var(--success);}
+.totals-row{display:flex;justify-content:flex-end;gap:2rem;padding:10px 0 0;border-top:0.5px solid var(--border);margin-top:4px;}
+.evol-row{padding:10px 12px;border-left:3px solid var(--gold);background:var(--gold-bg);border-radius:0 var(--radius) var(--radius) 0;margin-bottom:8px;}
+.evol-date{font-size:11px;color:var(--text3);margin-bottom:3px;}
+.evol-clinic{font-size:11px;color:var(--gold);font-weight:500;margin-bottom:4px;}
+.abono-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
+.abono-row:last-child{border-bottom:none;}
+@media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform 0.2s;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.grid-2,.grid-3{grid-template-columns:1fr;}.bh-row,.b-line{grid-template-columns:1.6fr 50px 56px 82px 26px;gap:4px;}.page{padding:1rem;}}
 </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="name">Dra. Catalina Campos V.</div>
@@ -185,8 +101,6 @@ textarea { resize: vertical; }
   </nav>
   <div class="sync-status" id="sync-status">⟳ Conectando...</div>
 </aside>
-
-<!-- MAIN -->
 <main class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px;">
@@ -195,8 +109,6 @@ textarea { resize: vertical; }
     </div>
     <button class="btn btn-gold btn-sm" id="topbar-action" onclick="topbarAction()">+ Nueva cita</button>
   </div>
-
-  <!-- PAGE: AGENDA -->
   <div class="page active" id="page-agenda">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
@@ -206,67 +118,38 @@ textarea { resize: vertical; }
           <button class="btn btn-sm" onclick="agendaNav(1)">▶</button>
           <button class="btn btn-sm" onclick="agendaGoToday()">Hoy</button>
         </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="btn btn-sm" onclick="openBlockModal()">🚫 Bloquear horario</button>
-        </div>
+        <button class="btn btn-sm" onclick="openBlockModal()">🚫 Bloquear horario</button>
       </div>
-      <div class="clinic-selector" id="clinic-selector"></div>
+      <div id="clinic-selector" style="margin-bottom:12px;"></div>
       <div id="agenda-grid"></div>
     </div>
   </div>
-
-  <!-- PAGE: PACIENTES -->
   <div class="page" id="page-pacientes">
     <div style="display:flex;gap:1rem;align-items:start;">
-      <!-- Lista -->
-      <div style="width:320px;flex-shrink:0;" id="patient-list-panel">
+      <div style="width:300px;flex-shrink:0;">
         <div class="card" style="padding:0.75rem;">
-          <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="patient-search" placeholder="Buscar paciente..." oninput="filterPatients()">
-          </div>
+          <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="patient-search" placeholder="Buscar paciente..." oninput="filterPatients()"></div>
           <div id="patient-list"></div>
         </div>
       </div>
-      <!-- Ficha -->
-      <div style="flex:1;" id="patient-detail-panel">
-        <div class="empty-state card">Selecciona un paciente para ver su ficha</div>
-      </div>
+      <div style="flex:1;" id="patient-detail-panel"><div class="empty-state card">Selecciona un paciente</div></div>
     </div>
   </div>
-
-  <!-- PAGE: NUEVO PRESUPUESTO -->
   <div class="page" id="page-nuevo-budget">
     <div class="grid-2" style="align-items:start;">
       <div>
         <div class="card">
           <div class="section-title">Paciente</div>
-          <div class="field">
-            <label>Buscar paciente existente</label>
-            <select id="budget-patient-select" onchange="selectBudgetPatient()">
-              <option value="">— Seleccionar paciente —</option>
-            </select>
-          </div>
-          <div id="budget-patient-info" style="display:none; background:var(--gold-bg); border-radius:var(--radius); padding:10px 12px; font-size:13px; margin-top:8px;"></div>
-          <div style="margin-top:10px;">
-            <div class="field"><label>Fecha del presupuesto</label><input type="date" id="budget-date"></div>
-            <div class="field"><label>Convenio (opcional)</label><input type="text" id="budget-convenio" placeholder="Ej: Fonasa, Isapre Cruz Blanca..."></div>
-            <div class="field"><label>Validez</label>
-              <select id="budget-validez">
-                <option value="15 días">15 días</option>
-                <option value="30 días" selected>30 días</option>
-                <option value="60 días">60 días</option>
-              </select>
-            </div>
-          </div>
+          <div class="field"><label>Seleccionar paciente</label><select id="budget-patient-select" onchange="selectBudgetPatient()"><option value="">— Seleccionar —</option></select></div>
+          <div id="budget-patient-info" style="display:none;background:var(--gold-bg);border-radius:var(--radius);padding:10px 12px;font-size:13px;margin-top:8px;"></div>
+          <div class="field" style="margin-top:10px;"><label>Fecha</label><input type="date" id="budget-date"></div>
+          <div class="field"><label>Convenio</label><input type="text" id="budget-convenio" placeholder="Fonasa, Isapre..."></div>
+          <div class="field"><label>Validez</label><select id="budget-validez"><option value="15 días">15 días</option><option value="30 días" selected>30 días</option><option value="60 días">60 días</option></select></div>
         </div>
         <div class="card">
-          <div class="section-title">Agregar procedimientos</div>
+          <div class="section-title">Procedimientos</div>
           <div id="budget-cat-chips" style="margin-bottom:10px;"></div>
-          <div class="search-bar">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="budget-proc-search" placeholder="Buscar..." oninput="filterBudgetProcs()">
-          </div>
+          <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="budget-proc-search" placeholder="Buscar..." oninput="filterBudgetProcs()"></div>
           <div id="budget-proc-list" style="border:0.5px solid var(--border);border-radius:var(--radius);max-height:220px;overflow-y:auto;"></div>
         </div>
       </div>
@@ -277,9 +160,9 @@ textarea { resize: vertical; }
           <div id="budget-totals-area" style="display:none;"></div>
         </div>
         <div class="card">
-          <div class="field"><label>Observaciones</label><textarea id="budget-obs" rows="3" placeholder="Indicaciones, plan de tratamiento..."></textarea></div>
+          <div class="field"><label>Observaciones</label><textarea id="budget-obs" rows="3"></textarea></div>
           <div style="display:flex;gap:8px;margin-top:4px;">
-            <button class="btn btn-gold" style="flex:1;" onclick="saveBudget()">💾 Guardar presupuesto</button>
+            <button class="btn btn-gold" style="flex:1;" onclick="saveBudget()">💾 Guardar</button>
             <button class="btn btn-primary" onclick="previewBudget()">👁 Vista previa</button>
           </div>
         </div>
@@ -295,8 +178,6 @@ textarea { resize: vertical; }
       </div>
     </div>
   </div>
-
-  <!-- PAGE: PRECIOS -->
   <div class="page" id="page-precios">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
@@ -305,856 +186,221 @@ textarea { resize: vertical; }
       </div>
       <div id="price-new-form" style="display:none;background:var(--bg2);border-radius:var(--radius);padding:14px;margin-bottom:14px;border:0.5px solid var(--border);">
         <div class="grid-3">
-          <div class="field"><label>Procedimiento</label><input type="text" id="np-name" placeholder="Nombre"></div>
-          <div class="field"><label>Categoría</label>
-            <select id="np-cat">
-              <option>Preventiva</option><option>Estética</option><option>Restauradora</option>
-              <option>Endodoncia</option><option>Periodoncia</option><option>Ortodoncia</option>
-              <option>Cirugía</option><option>Implantología</option><option>Prótesis</option>
-              <option>Radiografía</option><option>Otras</option>
-            </select>
-          </div>
-          <div class="field"><label>Precio (CLP)</label><input type="number" id="np-price" placeholder="0" min="0"></div>
+          <div class="field"><label>Procedimiento</label><input type="text" id="np-name"></div>
+          <div class="field"><label>Categoría</label><select id="np-cat"><option>Preventiva</option><option>Estética</option><option>Restauradora</option><option>Endodoncia</option><option>Periodoncia</option><option>Ortodoncia</option><option>Cirugía</option><option>Implantología</option><option>Prótesis</option><option>Radiografía</option><option>Otras</option></select></div>
+          <div class="field"><label>Precio (CLP)</label><input type="number" id="np-price" min="0"></div>
         </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-gold btn-sm" onclick="saveNewPrice()">Guardar</button>
-          <button class="btn btn-sm" onclick="togglePriceForm()">Cancelar</button>
-        </div>
+        <div style="display:flex;gap:8px;"><button class="btn btn-gold btn-sm" onclick="saveNewPrice()">Guardar</button><button class="btn btn-sm" onclick="togglePriceForm()">Cancelar</button></div>
       </div>
-      <table class="table" id="prices-table">
-        <thead><tr><th>Procedimiento</th><th>Categoría</th><th style="text-align:right;">Precio</th><th style="width:50px;"></th></tr></thead>
-        <tbody id="prices-tbody"></tbody>
-      </table>
+      <table class="table"><thead><tr><th>Procedimiento</th><th>Categoría</th><th style="text-align:right;">Precio</th><th style="width:50px;"></th></tr></thead><tbody id="prices-tbody"></tbody></table>
     </div>
   </div>
-
-  <!-- PAGE: PERFIL -->
   <div class="page" id="page-perfil">
     <div class="card">
       <div class="section-title">Datos profesionales</div>
       <div class="grid-2">
-        <div class="field"><label>Nombre completo</label><input type="text" id="prof-name" placeholder="Dra. Catalina Campos V."></div>
-        <div class="field"><label>Especialidad</label><input type="text" id="prof-spec" placeholder="Cirujana Dentista"></div>
+        <div class="field"><label>Nombre</label><input type="text" id="prof-name"></div>
+        <div class="field"><label>Especialidad</label><input type="text" id="prof-spec"></div>
       </div>
       <div class="grid-2">
         <div class="field"><label>RUT</label><input type="text" id="prof-rut"></div>
-        <div class="field"><label>Registro / SIS</label><input type="text" id="prof-reg" placeholder="opcional"></div>
+        <div class="field"><label>Registro</label><input type="text" id="prof-reg"></div>
       </div>
       <div class="grid-2">
         <div class="field"><label>Teléfono</label><input type="text" id="prof-phone"></div>
         <div class="field"><label>Email</label><input type="email" id="prof-email"></div>
       </div>
-      <div class="field"><label>Pie de presupuesto</label><textarea id="prof-footer" rows="2" placeholder="Texto que aparece al pie de cada presupuesto"></textarea></div>
+      <div class="field"><label>Pie de presupuesto</label><textarea id="prof-footer" rows="2"></textarea></div>
       <button class="btn btn-gold" onclick="saveProfile()">💾 Guardar perfil</button>
     </div>
   </div>
 </main>
-
-<!-- MODALS -->
-
-<!-- Modal: Nueva cita / bloqueo -->
-<div class="modal-overlay" id="modal-cita">
-  <div class="modal">
-    <div class="modal-title"><span id="modal-cita-title">Nueva cita</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-cita')">✕</button></div>
-    <div id="modal-cita-body"></div>
-  </div>
-</div>
-
-<!-- Modal: Paciente -->
-<div class="modal-overlay" id="modal-paciente">
-  <div class="modal" style="max-width:700px;">
-    <div class="modal-title"><span id="modal-paciente-title">Nuevo paciente</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-paciente')">✕</button></div>
-    <div id="modal-paciente-body"></div>
-  </div>
-</div>
-
-<!-- PDF Template (hidden) -->
-<div class="pdf-template" id="pdf-template"></div>
-
+<div class="modal-overlay" id="modal-cita"><div class="modal"><div class="modal-title"><span id="modal-cita-title">Nueva cita</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-cita')">✕</button></div><div id="modal-cita-body"></div></div></div>
+<div class="modal-overlay" id="modal-paciente"><div class="modal" style="max-width:700px;"><div class="modal-title"><span id="modal-paciente-title">Nuevo paciente</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-paciente')">✕</button></div><div id="modal-paciente-body"></div></div></div>
 <div class="toast" id="toast"></div>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, collection, getDocs, addDoc, deleteDoc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDe609i7jiHBPkTcKR47FeSSDeDJGBwDyU",
-  authDomain: "presupuestos-dental.firebaseapp.com",
-  projectId: "presupuestos-dental",
-  storageBucket: "presupuestos-dental.firebasestorage.app",
-  messagingSenderId: "793735317093",
-  appId: "1:793735317093:web:dd846ddfe52d9fdbc5288c"
-};
-
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-const storage = getStorage(fbApp);
-
-const CATS = ['Preventiva','Estética','Restauradora','Endodoncia','Periodoncia','Ortodoncia','Cirugía','Implantología','Prótesis','Radiografía','Otras'];
-const CLINICS = ['Boutique Dental Montemar','Mauco Salud','OdontoPlus','AltoCampus'];
-const COLORS_CLINIC = ['#185fa5','#1a7a4a','#7a3a00','#6a1a7a'];
-
-const DEFAULT_PRICES = [
-  {name:'Consulta diagnóstica',cat:'Preventiva',price:30000},
-  {name:'Limpieza dental (profilaxis)',cat:'Preventiva',price:45000},
-  {name:'Fluorización',cat:'Preventiva',price:20000},
-  {name:'Sellantes (por pieza)',cat:'Preventiva',price:20000},
-  {name:'Blanqueamiento LED en consulta',cat:'Estética',price:185000},
-  {name:'Blanqueamiento con cubetas',cat:'Estética',price:110000},
-  {name:'Carilla de resina (por pieza)',cat:'Estética',price:110000},
-  {name:'Carilla de porcelana (por pieza)',cat:'Estética',price:300000},
-  {name:'Bótox facial (por zona)',cat:'Estética',price:100000},
-  {name:'Relleno de labios',cat:'Estética',price:155000},
-  {name:'Obturación simple 1 cara',cat:'Restauradora',price:42000},
-  {name:'Obturación compuesta 2-3 caras',cat:'Restauradora',price:65000},
-  {name:'Reconstrucción con perno de fibra',cat:'Restauradora',price:100000},
-  {name:'Incrustación cerámica inlay/onlay',cat:'Restauradora',price:190000},
-  {name:'Corona metal-cerámica',cat:'Restauradora',price:260000},
-  {name:'Corona zirconia',cat:'Restauradora',price:370000},
-  {name:'Plano de relajación bruxismo',cat:'Restauradora',price:115000},
-  {name:'Pulpotomía (urgencia)',cat:'Endodoncia',price:60000},
-  {name:'Tratamiento de conducto 1 conducto',cat:'Endodoncia',price:130000},
-  {name:'Tratamiento de conducto 2 conductos',cat:'Endodoncia',price:170000},
-  {name:'Tratamiento de conducto 3+ conductos',cat:'Endodoncia',price:205000},
-  {name:'Raspado y alisado radicular (cuadrante)',cat:'Periodoncia',price:75000},
-  {name:'Gingivectomía (por zona)',cat:'Periodoncia',price:100000},
-  {name:'Extracción simple',cat:'Cirugía',price:45000},
-  {name:'Extracción muela del juicio erupcionada',cat:'Cirugía',price:100000},
-  {name:'Extracción muela del juicio retenida',cat:'Cirugía',price:150000},
-  {name:'Frenectomía',cat:'Cirugía',price:100000},
-  {name:'Implante dental (por unidad)',cat:'Implantología',price:650000},
-  {name:'Corona sobre implante',cat:'Implantología',price:350000},
-  {name:'Prótesis removible acrílica (por maxilar)',cat:'Prótesis',price:240000},
-  {name:'Prótesis removible base metálica',cat:'Prótesis',price:305000},
-  {name:'Reparación de prótesis',cat:'Prótesis',price:45000},
-  {name:'Radiografía periapical (por unidad)',cat:'Radiografía',price:12000},
-  {name:'Radiografía panorámica',cat:'Radiografía',price:32000},
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,doc,setDoc,getDoc,collection,getDocs,addDoc,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import{getStorage,ref,uploadBytes,getDownloadURL}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+const FC={apiKey:"AIzaSyDe609i7jiHBPkTcKR47FeSSDeDJGBwDyU",authDomain:"presupuestos-dental.firebaseapp.com",projectId:"presupuestos-dental",storageBucket:"presupuestos-dental.firebasestorage.app",messagingSenderId:"793735317093",appId:"1:793735317093:web:dd846ddfe52d9fdbc5288c"};
+const fbApp=initializeApp(FC);const db=getFirestore(fbApp);const storage=getStorage(fbApp);
+const CATS=["Preventiva","Estética","Restauradora","Endodoncia","Periodoncia","Ortodoncia","Cirugía","Implantología","Prótesis","Radiografía","Otras"];
+const CLINICS=["Boutique Dental Montemar","Mauco Salud","OdontoPlus","AltoCampus"];
+const CC=["#185fa5","#1a7a4a","#7a3a00","#6a1a7a"];
+const DP=[
+{name:"Consulta diagnóstica",cat:"Preventiva",price:30000},{name:"Limpieza dental",cat:"Preventiva",price:45000},
+{name:"Fluorización",cat:"Preventiva",price:20000},{name:"Sellantes (por pieza)",cat:"Preventiva",price:20000},
+{name:"Blanqueamiento LED en consulta",cat:"Estética",price:185000},{name:"Blanqueamiento con cubetas",cat:"Estética",price:110000},
+{name:"Carilla de resina (por pieza)",cat:"Estética",price:110000},{name:"Carilla de porcelana (por pieza)",cat:"Estética",price:300000},
+{name:"Bótox facial (por zona)",cat:"Estética",price:100000},{name:"Relleno de labios",cat:"Estética",price:155000},
+{name:"Obturación simple 1 cara",cat:"Restauradora",price:42000},{name:"Obturación compuesta 2-3 caras",cat:"Restauradora",price:65000},
+{name:"Reconstrucción con perno de fibra",cat:"Restauradora",price:100000},{name:"Incrustación cerámica",cat:"Restauradora",price:190000},
+{name:"Corona metal-cerámica",cat:"Restauradora",price:260000},{name:"Corona zirconia",cat:"Restauradora",price:370000},
+{name:"Plano de relajación bruxismo",cat:"Restauradora",price:115000},{name:"Pulpotomía (urgencia)",cat:"Endodoncia",price:60000},
+{name:"Tratamiento de conducto 1 conducto",cat:"Endodoncia",price:130000},{name:"Tratamiento de conducto 2 conductos",cat:"Endodoncia",price:170000},
+{name:"Tratamiento de conducto 3+ conductos",cat:"Endodoncia",price:205000},{name:"Raspado y alisado radicular",cat:"Periodoncia",price:75000},
+{name:"Gingivectomía (por zona)",cat:"Periodoncia",price:100000},{name:"Extracción simple",cat:"Cirugía",price:45000},
+{name:"Extracción muela del juicio erupcionada",cat:"Cirugía",price:100000},{name:"Extracción muela del juicio retenida",cat:"Cirugía",price:150000},
+{name:"Implante dental (por unidad)",cat:"Implantología",price:650000},{name:"Corona sobre implante",cat:"Implantología",price:350000},
+{name:"Prótesis removible acrílica",cat:"Prótesis",price:240000},{name:"Prótesis removible base metálica",cat:"Prótesis",price:305000},
+{name:"Radiografía periapical",cat:"Radiografía",price:12000},{name:"Radiografía panorámica",cat:"Radiografía",price:32000}
 ];
+let S={profile:{name:"Dra. Catalina Campos V.",spec:"Cirujana Dentista",rut:"19.817.843-8",reg:"",phone:"",email:"",footer:"Presupuesto referencial. Los precios pueden variar según complejidad del caso clínico."},priceList:[],patients:[],agendaEvents:[],budgetLines:[],budgetFilterCat:"all",budgetFilterText:"",nextBudgetLineId:1,selectedPatientId:null,agendaWeekOffset:0,agendaClinic:0,budgetCounter:1};
+const setSS=m=>{const e=document.getElementById("sync-status");if(e)e.textContent=m;};
+const toast=m=>{const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);};
+const fmt=n=>"$"+Math.round(n).toLocaleString("es-CL");
+const fmtDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"}):"—";
+const initials=n=>n?n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase():"?";
+const closeModal=id=>document.getElementById(id).classList.remove("open");
+const openModal=id=>document.getElementById(id).classList.add("open");
+window.closeModal=closeModal;
 
-let state = {
-  profile: {name:'Dra. Catalina Campos V.',spec:'Cirujana Dentista',rut:'19.817.843-8',reg:'',phone:'',email:'',footer:'Presupuesto referencial. Los precios pueden variar según complejidad del caso clínico.'},
-  priceList: [],
-  patients: [],
-  agendaEvents: [],
-  budgetLines: [],
-  budgetFilterCat: 'all',
-  budgetFilterText: '',
-  nextBudgetLineId: 1,
-  selectedPatientId: null,
-  agendaWeekOffset: 0,
-  agendaClinic: 0,
-  budgetCounter: 1,
+async function loadAll(){
+  setSS("⟳ Conectando...");
+  try{
+    const ps=await getDoc(doc(db,"config","profile"));if(ps.exists())S.profile={...S.profile,...ps.data()};
+    const bc=await getDoc(doc(db,"config","budgetCounter"));if(bc.exists())S.budgetCounter=bc.data().value||1;
+    const prSnap=await getDocs(collection(db,"prices"));
+    if(prSnap.empty){for(const p of DP){const r=await addDoc(collection(db,"prices"),p);S.priceList.push({...p,id:r.id});}}
+    else{prSnap.forEach(d=>S.priceList.push({...d.data(),id:d.id}));S.priceList.sort((a,b)=>CATS.indexOf(a.cat)-CATS.indexOf(b.cat));}
+    const patSnap=await getDocs(collection(db,"patients"));
+    patSnap.forEach(d=>S.patients.push({...d.data(),id:d.id}));S.patients.sort((a,b)=>a.name.localeCompare(b.name));
+    const agSnap=await getDocs(collection(db,"agenda"));agSnap.forEach(d=>S.agendaEvents.push({...d.data(),id:d.id}));
+    setSS("☁ Sincronizado");
+    renderAgenda();renderClinicSelector();populateBudgetPatientSelect();renderBudgetCatChips();renderBudgetProcList();
+    loadProfileForm();
+  }catch(e){setSS("⚠ Sin conexión — recarga la página");console.error(e);}
+}
+
+window.showPage=function(page){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  const titles={agenda:"Agenda",pacientes:"Pacientes","nuevo-budget":"Nuevo presupuesto",precios:"Mis precios",perfil:"Mi perfil"};
+  const acts={agenda:"+ Nueva cita",pacientes:"+ Nuevo paciente","nuevo-budget":"Limpiar",precios:"",perfil:""};
+  document.getElementById("topbar-title").textContent=titles[page]||"";
+  const btn=document.getElementById("topbar-action");btn.textContent=acts[page]||"";btn.style.display=acts[page]?"block":"none";
+  const pages=["agenda","pacientes","nuevo-budget","precios","perfil"];
+  document.querySelectorAll(".nav-item").forEach((n,i)=>n.classList.toggle("active",pages[i]===page));
+  if(page==="precios")renderPricesTable();
+  if(page==="perfil")loadProfileForm();
+  if(page==="pacientes")renderPatientList();
+  if(page==="nuevo-budget"){renderBudgetCatChips();renderBudgetProcList();populateBudgetPatientSelect();}
+  if(page==="agenda")renderAgenda();
+  document.getElementById("sidebar").classList.remove("open");
 };
+window.topbarAction=function(){const a=document.querySelector(".page.active").id;if(a==="page-agenda")openCitaModal();if(a==="page-pacientes")openNewPatientModal();if(a==="page-nuevo-budget")clearBudget();};
+window.toggleSidebar=function(){document.getElementById("sidebar").classList.toggle("open");};
 
-function setSyncStatus(msg) { document.getElementById('sync-status').textContent = msg; }
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-function fmt(n) { return '$' + Math.round(n).toLocaleString('es-CL'); }
-function fmtDate(d) { return d ? new Date(d+'T12:00:00').toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'}) : ''; }
-function initials(name) { return name ? name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() : '?'; }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-
-// ---- NAVIGATION ----
-window.showPage = function(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => { if(n.textContent.toLowerCase().includes(page.split('-')[0].toLowerCase())) n.classList.add('active'); });
-  const titles = {'agenda':'Agenda','pacientes':'Pacientes','nuevo-budget':'Nuevo presupuesto','precios':'Mis precios','perfil':'Mi perfil'};
-  const actions = {'agenda':'+ Nueva cita','pacientes':'+ Nuevo paciente','nuevo-budget':'Limpiar','precios':'','perfil':''};
-  document.getElementById('topbar-title').textContent = titles[page]||'';
-  const btn = document.getElementById('topbar-action');
-  btn.textContent = actions[page]||'';
-  btn.style.display = actions[page] ? 'block' : 'none';
-  if(page==='precios') renderPricesTable();
-  if(page==='perfil') loadProfileForm();
-  if(page==='pacientes') renderPatientList();
-  if(page==='nuevo-budget') { renderBudgetCatChips(); renderBudgetProcList(); populateBudgetPatientSelect(); }
-  if(page==='agenda') renderAgenda();
-  document.getElementById('sidebar').classList.remove('open');
-};
-
-window.topbarAction = function() {
-  const active = document.querySelector('.page.active').id;
-  if(active==='page-agenda') openCitaModal();
-  if(active==='page-pacientes') openNewPatientModal();
-  if(active==='page-nuevo-budget') clearBudget();
-};
-
-window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('open'); };
-
-// ---- FIREBASE LOAD ----
-async function loadAll() {
-  setSyncStatus('⟳ Conectando...');
-  try {
-    // Profile
-    const ps = await getDoc(doc(db,'config','profile'));
-    if(ps.exists()) state.profile = {...state.profile, ...ps.data()};
-
-    // Budget counter
-    const bc = await getDoc(doc(db,'config','budgetCounter'));
-    if(bc.exists()) state.budgetCounter = bc.data().value || 1;
-
-    // Prices
-    const prSnap = await getDocs(collection(db,'prices'));
-    if(prSnap.empty) {
-      for(const p of DEFAULT_PRICES) {
-        const r = await addDoc(collection(db,'prices'), p);
-        state.priceList.push({...p, id:r.id});
-      }
-    } else {
-      prSnap.forEach(d => state.priceList.push({...d.data(), id:d.id}));
-      state.priceList.sort((a,b)=>CATS.indexOf(a.cat)-CATS.indexOf(b.cat));
-    }
-
-    // Patients
-    const patSnap = await getDocs(collection(db,'patients'));
-    patSnap.forEach(d => state.patients.push({...d.data(), id:d.id}));
-    state.patients.sort((a,b)=>a.name.localeCompare(b.name));
-
-    // Agenda events
-    const agSnap = await getDocs(collection(db,'agenda'));
-    agSnap.forEach(d => state.agendaEvents.push({...d.data(), id:d.id}));
-
-    setSyncStatus('☁ Sincronizado');
-    renderAgenda();
-    renderClinicSelector();
-    populateBudgetPatientSelect();
-    renderBudgetCatChips();
-    renderBudgetProcList();
-  } catch(e) {
-    setSyncStatus('⚠ Sin conexión');
-    console.error(e);
-  }
-}
-
-// ---- AGENDA ----
-window.agendaNav = function(dir) { state.agendaWeekOffset += dir; renderAgenda(); };
-window.agendaGoToday = function() { state.agendaWeekOffset = 0; renderAgenda(); };
-
-function getWeekDates(offset) {
-  const now = new Date();
-  const day = now.getDay();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - (day===0?6:day-1) + offset*7);
-  const days = [];
-  for(let i=0;i<5;i++){
-    const d = new Date(monday);
-    d.setDate(monday.getDate()+i);
-    days.push(d);
-  }
-  return days;
-}
-
-function dateStr(d) { return d.toISOString().split('T')[0]; }
-
-function renderClinicSelector() {
-  const el = document.getElementById('clinic-selector');
-  el.innerHTML = CLINICS.map((c,i) =>
-    `<div class="clinic-chip${state.agendaClinic===i?' selected':''}" onclick="selectClinic(${i})" style="${state.agendaClinic===i?'background:'+COLORS_CLINIC[i]+';border-color:'+COLORS_CLINIC[i]+';color:#fff;':''}">${c}</div>`
-  ).join('');
-}
-
-window.selectClinic = function(i) { state.agendaClinic=i; renderClinicSelector(); renderAgenda(); };
-
-function renderAgenda() {
-  const days = getWeekDates(state.agendaWeekOffset);
-  const HOURS = [];
-  for(let h=9;h<=20;h++) { HOURS.push(h+':00'); if(h<20) HOURS.push(h+':30'); }
-  const label = `${days[0].toLocaleDateString('es-CL',{day:'2-digit',month:'short'})} — ${days[4].toLocaleDateString('es-CL',{day:'2-digit',month:'short',year:'numeric'})}`;
-  document.getElementById('agenda-week-label').textContent = label;
-  const clinic = CLINICS[state.agendaClinic];
-  const clEvents = state.agendaEvents.filter(e => e.clinic===clinic);
-
-  let headerHtml = '<div style="font-size:11px;color:var(--text3);padding:8px;background:var(--bg2);border-radius:var(--radius) 0 0 0;"></div>';
-  days.forEach(d => {
-    const isToday = dateStr(d)===dateStr(new Date());
-    headerHtml += `<div style="background:var(--bg2);padding:8px;text-align:center;border-left:0.5px solid var(--border);">
-      <div style="font-size:11px;color:var(--text3);">${['Lun','Mar','Mié','Jue','Vie'][d.getDay()-1]||'Dom'}</div>
-      <div style="font-size:14px;font-weight:${isToday?'700':'400'};color:${isToday?'var(--gold)':'var(--text)'};">${d.getDate()}</div>
-    </div>`;
-  });
-
-  let bodyHtml = '';
-  HOURS.forEach((time,ti) => {
-    bodyHtml += `<div style="background:var(--bg2);padding:4px 6px;font-size:11px;color:var(--text3);text-align:right;border-top:${ti%2===0?'0.5px solid var(--border)':'none'};display:flex;align-items:flex-start;justify-content:flex-end;padding-top:6px;">${ti%2===0?time:''}</div>`;
-    days.forEach(d => {
-      const ds = dateStr(d);
-      const slotEvents = clEvents.filter(e => e.date===ds && e.time===time);
-      let evHtml = '';
-      slotEvents.forEach(ev => {
-        evHtml += `<div class="agenda-event ${ev.type||'cita'}" onclick="viewEvent('${ev.id}')" style="z-index:2;height:${ev.duration===60?'58px':'28px'};">
-          ${ev.type==='bloqueo'?'🚫 '+ev.label:(ev.patientName||'Cita')}</div>`;
-      });
-      bodyHtml += `<div style="position:relative;min-height:30px;background:var(--bg);border-left:0.5px solid var(--border);border-top:${ti%2===0?'0.5px solid var(--border)':'none'};" onclick="openSlotModal('${ds}','${time}')">${evHtml}</div>`;
+// AGENDA
+const dStr=d=>d.toISOString().split("T")[0];
+function getWeekDays(offset){const now=new Date();const day=now.getDay();const mon=new Date(now);mon.setDate(now.getDate()-(day===0?6:day-1)+offset*7);return Array.from({length:5},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d;});}
+function renderClinicSelector(){const el=document.getElementById("clinic-selector");if(!el)return;el.innerHTML=CLINICS.map((c,i)=>`<span class="clinic-chip" style="${S.agendaClinic===i?"background:"+CC[i]+";color:#fff;border-color:"+CC[i]+";":""}" onclick="selectClinic(${i})">${c}</span>`).join("");}
+window.selectClinic=function(i){S.agendaClinic=i;renderClinicSelector();renderAgenda();};
+window.agendaNav=function(d){S.agendaWeekOffset+=d;renderAgenda();};
+window.agendaGoToday=function(){S.agendaWeekOffset=0;renderAgenda();};
+function renderAgenda(){
+  const days=getWeekDays(S.agendaWeekOffset);
+  const HOURS=[];for(let h=9;h<=20;h++){HOURS.push(h+":00");if(h<20)HOURS.push(h+":30");}
+  const lbl=`${days[0].toLocaleDateString("es-CL",{day:"2-digit",month:"short"})} — ${days[4].toLocaleDateString("es-CL",{day:"2-digit",month:"short",year:"numeric"})}`;
+  const wl=document.getElementById("agenda-week-label");if(wl)wl.textContent=lbl;
+  const clinic=CLINICS[S.agendaClinic];const clEv=S.agendaEvents.filter(e=>e.clinic===clinic);const today=dStr(new Date());
+  let hH=`<div style="font-size:11px;color:var(--text3);padding:8px;background:var(--bg2);"></div>`;
+  days.forEach(d=>{const isT=dStr(d)===today;hH+=`<div style="background:var(--bg2);padding:8px;text-align:center;border-left:0.5px solid var(--border);"><div style="font-size:11px;color:var(--text3);">${["Lun","Mar","Mié","Jue","Vie"][d.getDay()-1]||""}</div><div style="font-size:14px;font-weight:${isT?700:400};color:${isT?"var(--gold)":"var(--text)"};">${d.getDate()}</div></div>`;});
+  let bH="";
+  HOURS.forEach((time,ti)=>{
+    bH+=`<div style="background:var(--bg2);padding:4px 6px;font-size:11px;color:var(--text3);text-align:right;border-top:${ti%2===0?"0.5px solid var(--border)":"none"};display:flex;align-items:flex-start;justify-content:flex-end;padding-top:6px;">${ti%2===0?time:""}</div>`;
+    days.forEach(d=>{
+      const ds=dStr(d);const slEv=clEv.filter(e=>e.date===ds&&e.time===time);
+      let evH=slEv.map(ev=>`<div onclick="viewEvent('${ev.id}')" style="position:absolute;inset:1px;border-radius:4px;padding:3px 6px;font-size:11px;font-weight:500;overflow:hidden;cursor:pointer;background:${ev.type==="bloqueo"?"var(--bg3)":"var(--info-bg)"};color:${ev.type==="bloqueo"?"var(--text3)":"var(--info)"};border-left:3px solid ${ev.type==="bloqueo"?"var(--text3)":"var(--info)"};height:${ev.duration===60?"58px":"28px"};z-index:2;">${ev.type==="bloqueo"?"🚫 "+ev.label:(ev.patientName||"Cita")}</div>`).join("");
+      bH+=`<div style="position:relative;min-height:30px;background:var(--bg);border-left:0.5px solid var(--border);border-top:${ti%2===0?"0.5px solid var(--border)":"none"};cursor:pointer;" onclick="openSlotModal('${ds}','${time}')">${evH}</div>`;
     });
   });
-
-  document.getElementById('agenda-grid').innerHTML =
-    `<div style="display:grid;grid-template-columns:60px repeat(5,1fr);background:var(--border);border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border2);">
-      ${headerHtml}${bodyHtml}
-    </div>`;
+  const ag=document.getElementById("agenda-grid");if(ag)ag.innerHTML=`<div style="display:grid;grid-template-columns:60px repeat(5,1fr);background:var(--border);border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border2);">${hH}${bH}</div>`;
 }
-
-window.openSlotModal = function(date, time) {
-  document.getElementById('modal-cita-title').textContent = 'Nueva cita';
-  document.getElementById('modal-cita-body').innerHTML = `
-    <div class="field"><label>Tipo</label>
-      <select id="cita-type" onchange="toggleCitaType()">
-        <option value="cita">Cita con paciente</option>
-        <option value="bloqueo">Bloquear horario</option>
-      </select>
-    </div>
-    <div id="cita-patient-field" class="field"><label>Paciente</label>
-      <select id="cita-patient">${state.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}</select>
-    </div>
-    <div id="bloqueo-label-field" class="field" style="display:none;"><label>Motivo del bloqueo</label><input type="text" id="cita-bloqueo-label" placeholder="Ej: Almuerzo, Reunión..."></div>
-    <div class="grid-2">
-      <div class="field"><label>Fecha</label><input type="date" id="cita-date" value="${date}"></div>
-      <div class="field"><label>Hora</label><input type="time" id="cita-time" value="${time.replace(':','').length===3?'0'+time.split(':')[0]+':'+time.split(':')[1]:time}"></div>
-    </div>
-    <div class="field"><label>Duración</label>
-      <select id="cita-duration"><option value="30">30 minutos</option><option value="60">60 minutos</option></select>
-    </div>
-    <div class="field"><label>Clínica</label>
-      <select id="cita-clinic">${CLINICS.map((c,i)=>`<option value="${c}" ${i===state.agendaClinic?'selected':''}>${c}</option>`).join('')}</select>
-    </div>
-    <div class="field"><label>Notas</label><textarea id="cita-notes" rows="2" placeholder="Motivo de consulta, indicaciones..."></textarea></div>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button class="btn btn-gold" style="flex:1;" onclick="saveCita()">Guardar</button>
-      <button class="btn" onclick="closeModal('modal-cita')">Cancelar</button>
-    </div>`;
-  openModal('modal-cita');
+window.openSlotModal=function(date,time){
+  document.getElementById("modal-cita-title").textContent="Nueva cita";
+  document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Tipo</label><select id="cita-type" onchange="toggleCitaType()"><option value="cita">Cita con paciente</option><option value="bloqueo">Bloquear horario</option></select></div><div id="cita-patient-field" class="field"><label>Paciente</label><select id="cita-patient">${S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}</select></div><div id="bloqueo-label-field" class="field" style="display:none;"><label>Motivo</label><input type="text" id="cita-bloqueo-label" placeholder="Almuerzo, Reunión..."></div><div class="grid-2"><div class="field"><label>Fecha</label><input type="date" id="cita-date" value="${date}"></div><div class="field"><label>Hora</label><input type="time" id="cita-time" value="${time}"></div></div><div class="field"><label>Duración</label><select id="cita-duration"><option value="30">30 minutos</option><option value="60">60 minutos</option></select></div><div class="field"><label>Clínica</label><select id="cita-clinic">${CLINICS.map((c,i)=>`<option value="${c}"${i===S.agendaClinic?" selected":""}>${c}</option>`).join("")}</select></div><div class="field"><label>Notas</label><textarea id="cita-notes" rows="2"></textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveCita()">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;
+  openModal("modal-cita");
 };
+window.openCitaModal=function(){openSlotModal(dStr(new Date()),"09:00");};
+window.openBlockModal=function(){openSlotModal(dStr(new Date()),"09:00");setTimeout(()=>{const s=document.getElementById("cita-type");if(s){s.value="bloqueo";toggleCitaType();}},50);};
+window.toggleCitaType=function(){const t=document.getElementById("cita-type").value;document.getElementById("cita-patient-field").style.display=t==="cita"?"block":"none";document.getElementById("bloqueo-label-field").style.display=t==="bloqueo"?"block":"none";};
+window.saveCita=async function(){const type=document.getElementById("cita-type").value;const data={type,date:document.getElementById("cita-date").value,time:document.getElementById("cita-time").value,duration:parseInt(document.getElementById("cita-duration").value),clinic:document.getElementById("cita-clinic").value,notes:document.getElementById("cita-notes").value,createdAt:new Date().toISOString()};if(type==="cita"){const pid=document.getElementById("cita-patient").value;const pat=S.patients.find(p=>p.id===pid);data.patientId=pid;data.patientName=pat?pat.name:"";}else{data.label=document.getElementById("cita-bloqueo-label").value||"Bloqueado";}try{const r=await addDoc(collection(db,"agenda"),data);S.agendaEvents.push({...data,id:r.id});closeModal("modal-cita");renderAgenda();toast("✓ Guardado");}catch(e){toast("⚠ Error");}};
+window.viewEvent=function(id){const ev=S.agendaEvents.find(e=>e.id===id);if(!ev)return;document.getElementById("modal-cita-title").textContent=ev.type==="bloqueo"?"Horario bloqueado":"Cita";document.getElementById("modal-cita-body").innerHTML=`<div style="font-size:13px;line-height:1.8;">${ev.type==="bloqueo"?`<div><b>Motivo:</b> ${ev.label}</div>`:`<div><b>Paciente:</b> ${ev.patientName}</div>`}<div><b>Fecha:</b> ${fmtDate(ev.date)}</div><div><b>Hora:</b> ${ev.time} — ${ev.duration} min</div><div><b>Clínica:</b> ${ev.clinic}</div>${ev.notes?`<div><b>Notas:</b> ${ev.notes}</div>`:""}</div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn btn-danger" onclick="deleteEvent('${id}')">🗑 Eliminar</button><button class="btn" onclick="closeModal('modal-cita')">Cerrar</button></div>`;openModal("modal-cita");};
+window.deleteEvent=async function(id){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"agenda",id));S.agendaEvents=S.agendaEvents.filter(e=>e.id!==id);closeModal("modal-cita");renderAgenda();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
 
-window.toggleCitaType = function() {
-  const t = document.getElementById('cita-type').value;
-  document.getElementById('cita-patient-field').style.display = t==='cita'?'block':'none';
-  document.getElementById('bloqueo-label-field').style.display = t==='bloqueo'?'block':'none';
+// PATIENTS
+window.filterPatients=function(){renderPatientList();};
+function renderPatientList(){const q=document.getElementById("patient-search")?.value?.toLowerCase()||"";const filtered=S.patients.filter(p=>p.name.toLowerCase().includes(q)||(p.rut||"").includes(q));const el=document.getElementById("patient-list");if(!el)return;if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:2rem;">Sin resultados</div>`;return;}el.innerHTML=filtered.map(p=>`<div class="patient-row" onclick="openPatient('${p.id}')"><div class="patient-avatar">${initials(p.name)}</div><div><div class="patient-name">${p.name}</div><div class="patient-sub">${p.rut||""} ${p.phone?"· "+p.phone:""}</div></div></div>`).join("");}
+window.openNewPatientModal=function(){document.getElementById("modal-paciente-title").textContent="Nuevo paciente";document.getElementById("modal-paciente-body").innerHTML=patientFormHTML(null);openModal("modal-paciente");};
+function patientFormHTML(pat){return`<div class="grid-2"><div class="field"><label>Nombre completo *</label><input type="text" id="pf-name" value="${pat?.name||""}"></div><div class="field"><label>RUT</label><input type="text" id="pf-rut" value="${pat?.rut||""}"></div></div><div class="grid-2"><div class="field"><label>Fecha de nacimiento</label><input type="date" id="pf-dob" value="${pat?.dob||""}"></div><div class="field"><label>Sexo</label><select id="pf-sex"><option value="">—</option><option${pat?.sex==="F"?" selected":""}>F</option><option${pat?.sex==="M"?" selected":""}>M</option></select></div></div><div class="grid-2"><div class="field"><label>Teléfono</label><input type="text" id="pf-phone" value="${pat?.phone||""}"></div><div class="field"><label>Email</label><input type="email" id="pf-email" value="${pat?.email||""}"></div></div><div class="field"><label>Dirección</label><input type="text" id="pf-address" value="${pat?.address||""}"></div><div class="field"><label>Convenio</label><input type="text" id="pf-convenio" value="${pat?.convenio||""}"></div><div class="field"><label>Antecedentes médicos</label><textarea id="pf-medical" rows="3">${pat?.medical||""}</textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="savePatient(${pat?`'${pat.id}'`:"null"})">💾 Guardar</button><button class="btn" onclick="closeModal('modal-paciente')">Cancelar</button></div>`;}
+window.savePatient=async function(id){const name=document.getElementById("pf-name").value.trim();if(!name){alert("El nombre es obligatorio");return;}const data={name,rut:document.getElementById("pf-rut").value,dob:document.getElementById("pf-dob").value,sex:document.getElementById("pf-sex").value,phone:document.getElementById("pf-phone").value,email:document.getElementById("pf-email").value,address:document.getElementById("pf-address").value,convenio:document.getElementById("pf-convenio").value,medical:document.getElementById("pf-medical").value,updatedAt:new Date().toISOString()};try{if(id){await updateDoc(doc(db,"patients",id),data);const idx=S.patients.findIndex(p=>p.id===id);if(idx>=0)S.patients[idx]={...S.patients[idx],...data};}else{data.createdAt=new Date().toISOString();const r=await addDoc(collection(db,"patients"),data);S.patients.push({...data,id:r.id});S.patients.sort((a,b)=>a.name.localeCompare(b.name));}closeModal("modal-paciente");renderPatientList();populateBudgetPatientSelect();if(S.selectedPatientId)openPatient(S.selectedPatientId);toast("✓ Guardado");}catch(e){toast("⚠ Error");console.error(e);}};
+window.editPatient=function(id){const pat=S.patients.find(p=>p.id===id);if(!pat)return;document.getElementById("modal-paciente-title").textContent="Editar paciente";document.getElementById("modal-paciente-body").innerHTML=patientFormHTML(pat);openModal("modal-paciente");};
+window.openPatient=async function(id){
+  S.selectedPatientId=id;const pat=S.patients.find(p=>p.id===id);if(!pat)return;
+  let budgets=[],evolutions=[],abonos=[],xrays=[];
+  try{const bs=await getDocs(collection(db,"patients",id,"budgets"));bs.forEach(d=>budgets.push({...d.data(),id:d.id}));budgets.sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));const es=await getDocs(collection(db,"patients",id,"evolutions"));es.forEach(d=>evolutions.push({...d.data(),id:d.id}));evolutions.sort((a,b)=>(b.date||"").localeCompare(a.date||""));const abs=await getDocs(collection(db,"patients",id,"abonos"));abs.forEach(d=>abonos.push({...d.data(),id:d.id}));abonos.sort((a,b)=>(b.date||"").localeCompare(a.date||""));const xs=await getDocs(collection(db,"patients",id,"xrays"));xs.forEach(d=>xrays.push({...d.data(),id:d.id}));}catch(e){console.error(e);}
+  const totalAb=abonos.reduce((s,a)=>s+(a.amount||0),0);const totalPr=budgets.reduce((s,b)=>s+(b.total||0),0);const saldo=totalPr-totalAb;
+  const panel=document.getElementById("patient-detail-panel");
+  panel.innerHTML=`<div class="card" style="margin-bottom:0.5rem;"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;"><div style="display:flex;align-items:center;gap:12px;"><div class="patient-avatar" style="width:48px;height:48px;font-size:18px;">${initials(pat.name)}</div><div><div style="font-size:17px;font-weight:600;">${pat.name}</div><div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.email].filter(Boolean).join(" · ")}</div>${pat.convenio?`<span class="badge badge-gold" style="margin-top:4px;">${pat.convenio}</span>`:""}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn btn-sm" onclick="editPatient('${id}')">✏️ Editar</button><button class="btn btn-gold btn-sm" onclick="newBudgetForPatient('${id}')">📄 Nuevo presupuesto</button></div></div></div>
+  <div class="tab-row"><button class="tab-btn active" onclick="switchPTab('info')">Ficha</button><button class="tab-btn" onclick="switchPTab('budgets')">Presupuestos</button><button class="tab-btn" onclick="switchPTab('evolutions')">Evoluciones</button><button class="tab-btn" onclick="switchPTab('abonos')">Abonos</button><button class="tab-btn" onclick="switchPTab('xrays')">Radiografías</button></div>
+  <div class="tab-panel active" id="pt-info"><div class="card"><div class="section-title">Datos personales</div><div class="grid-2">${[["Nombre",pat.name],["RUT",pat.rut],["Nacimiento",pat.dob?fmtDate(pat.dob):"—"],["Sexo",pat.sex||"—"],["Teléfono",pat.phone||"—"],["Email",pat.email||"—"],["Dirección",pat.address||"—"],["Convenio",pat.convenio||"—"]].map(([l,v])=>`<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--text3);">${l}</div><div style="font-size:13px;">${v||"—"}</div></div>`).join("")}</div>${pat.medical?`<div style="margin-top:8px;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;">ANTECEDENTES MÉDICOS</div><div style="background:var(--warn-bg);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 var(--radius) var(--radius) 0;font-size:13px;">${pat.medical}</div></div>`:""}</div></div>
+  <div class="tab-panel" id="pt-budgets"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><div class="section-title" style="margin:0;">Presupuestos</div><span style="font-size:12px;">Total: <b>${fmt(totalPr)}</b> | Abonado: <b style="color:var(--success);">${fmt(totalAb)}</b> | Saldo: <b style="color:${saldo>0?"var(--danger)":"var(--success)"};">${fmt(saldo)}</b></span></div>${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Procedimientos</th><th></th></tr></thead><tbody>${budgets.map(b=>`<tr><td><span class="badge badge-gold">Nº ${b.number||"—"}</span></td><td>${fmtDate(b.date)}</td><td style="font-weight:500;">${fmt(b.total||0)}</td><td style="font-size:12px;color:var(--text2);">${(b.lines||[]).map(l=>l.name).join(", ").substring(0,50)}</td><td><button class="btn btn-sm btn-gold" onclick="downloadSavedPDF(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">PDF</button></td></tr>`).join("")}</tbody></table>`:"<div class='empty-state'>Sin presupuestos</div>"}</div></div>
+  <div class="tab-panel" id="pt-evolutions"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Evoluciones</div><button class="btn btn-gold btn-sm" onclick="openEvolutionModal('${id}')">+ Agregar</button></div>${evolutions.length?evolutions.map(e=>`<div class="evol-row"><div style="display:flex;justify-content:space-between;"><div><div class="evol-date">${fmtDate(e.date)}</div><div class="evol-clinic">${e.clinic||""}</div>${e.treatment?`<div style="font-size:11px;color:var(--text2);">Tratamiento: <b>${e.treatment}</b></div>`:""}<div style="font-size:13px;margin-top:4px;">${e.text}</div></div><button class="btn btn-sm btn-danger" onclick="deleteEvolution('${id}','${e.id}')">✕</button></div></div>`).join(""):"<div class='empty-state'>Sin evoluciones</div>"}</div></div>
+  <div class="tab-panel" id="pt-abonos"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Abonos</div><button class="btn btn-gold btn-sm" onclick="openAbonoModal('${id}')">+ Agregar</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;"><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Presupuestado</div><div style="font-size:17px;font-weight:600;">${fmt(totalPr)}</div></div><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Abonado</div><div style="font-size:17px;font-weight:600;color:var(--success);">${fmt(totalAb)}</div></div><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Saldo</div><div style="font-size:17px;font-weight:600;color:${saldo>0?"var(--danger)":"var(--success)"};">${fmt(saldo)}</div></div></div>${abonos.length?abonos.map(a=>`<div class="abono-row"><div><div style="font-size:13px;font-weight:500;">${fmt(a.amount)}</div><div style="font-size:11px;color:var(--text3);">${fmtDate(a.date)}${a.method?" · "+a.method:""}</div>${a.note?`<div style="font-size:12px;color:var(--text2);">${a.note}</div>`:""}</div><button class="btn btn-sm btn-danger" onclick="deleteAbono('${id}','${a.id}')">✕</button></div>`).join(""):"<div class='empty-state'>Sin abonos</div>"}</div></div>
+  <div class="tab-panel" id="pt-xrays"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Radiografías</div><label class="btn btn-gold btn-sm" style="cursor:pointer;">+ Subir<input type="file" accept="image/*" style="display:none;" onchange="uploadXray(event,'${id}')"></label></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">${xrays.length?xrays.map(x=>`<div style="position:relative;border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border);"><img src="${x.url}" style="width:100%;height:120px;object-fit:cover;cursor:pointer;" onclick="window.open('${x.url}')"><div style="padding:4px 6px;font-size:11px;color:var(--text2);">${fmtDate(x.date)}</div><button class="btn btn-danger btn-sm" style="position:absolute;top:4px;right:4px;padding:2px 6px;" onclick="deleteXray('${id}','${x.id}')">✕</button></div>`).join(""):"<div class='empty-state' style='grid-column:1/-1;'>Sin radiografías</div>"}</div></div></div>`;
 };
+window.switchPTab=function(tab){document.querySelectorAll(".tab-btn").forEach((b,i)=>b.classList.toggle("active",["info","budgets","evolutions","abonos","xrays"][i]===tab));["info","budgets","evolutions","abonos","xrays"].forEach(t=>{const el=document.getElementById("pt-"+t);if(el)el.classList.toggle("active",t===tab);});};
+window.openEvolutionModal=function(patId){document.getElementById("modal-cita-title").textContent="Nueva evolución";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Fecha</label><input type="date" id="ev-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Clínica</label><select id="ev-clinic">${CLINICS.map(c=>`<option>${c}</option>`).join("")}</select></div><div class="field"><label>Tratamiento realizado</label><input type="text" id="ev-treatment" placeholder="Ej: Obturación pieza 2.6..."></div><div class="field"><label>Notas clínicas</label><textarea id="ev-text" rows="4" placeholder="Descripción de la sesión..."></textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveEvolution('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
+window.saveEvolution=async function(patId){const data={date:document.getElementById("ev-date").value,clinic:document.getElementById("ev-clinic").value,treatment:document.getElementById("ev-treatment").value,text:document.getElementById("ev-text").value,createdAt:new Date().toISOString()};if(!data.text){alert("Ingresa las notas");return;}try{await addDoc(collection(db,"patients",patId,"evolutions"),data);closeModal("modal-cita");openPatient(patId);toast("✓ Evolución guardada");}catch(e){toast("⚠ Error");}};
+window.deleteEvolution=async function(patId,evId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"evolutions",evId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
+window.openAbonoModal=function(patId){document.getElementById("modal-cita-title").textContent="Registrar abono";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Monto (CLP)</label><input type="number" id="ab-amount" min="0"></div><div class="field"><label>Fecha</label><input type="date" id="ab-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Método de pago</label><select id="ab-method"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div><div class="field"><label>Nota</label><input type="text" id="ab-note"></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveAbono('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
+window.saveAbono=async function(patId){const amount=parseFloat(document.getElementById("ab-amount").value)||0;if(!amount){alert("Ingresa el monto");return;}const data={amount,date:document.getElementById("ab-date").value,method:document.getElementById("ab-method").value,note:document.getElementById("ab-note").value,createdAt:new Date().toISOString()};try{await addDoc(collection(db,"patients",patId,"abonos"),data);closeModal("modal-cita");openPatient(patId);toast("✓ Abono registrado");}catch(e){toast("⚠ Error");}};
+window.deleteAbono=async function(patId,abId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"abonos",abId));openPatient(patId);toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
+window.uploadXray=async function(event,patId){const file=event.target.files[0];if(!file)return;toast("⟳ Subiendo...");try{const r=ref(storage,`xrays/${patId}/${Date.now()}_${file.name}`);await uploadBytes(r,file);const url=await getDownloadURL(r);await addDoc(collection(db,"patients",patId,"xrays"),{url,date:new Date().toISOString().split("T")[0],name:file.name,createdAt:new Date().toISOString()});openPatient(patId);toast("✓ Radiografía subida");}catch(e){toast("⚠ Error al subir");console.error(e);}};
+window.deleteXray=async function(patId,xId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"xrays",xId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
 
-window.openBlockModal = function() { openSlotModal(dateStr(new Date()),'09:00'); setTimeout(()=>{const s=document.getElementById('cita-type');if(s){s.value='bloqueo';toggleCitaType();}},50); };
-window.openCitaModal = function() { openSlotModal(dateStr(new Date()),'09:00'); };
+// BUDGET
+window.newBudgetForPatient=function(patId){showPage("nuevo-budget");setTimeout(()=>{const sel=document.getElementById("budget-patient-select");if(sel){sel.value=patId;selectBudgetPatient();}},100);};
+function populateBudgetPatientSelect(){const sel=document.getElementById("budget-patient-select");if(!sel)return;sel.innerHTML=`<option value="">— Seleccionar —</option>`+S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("");}
+window.selectBudgetPatient=function(){const id=document.getElementById("budget-patient-select").value;const info=document.getElementById("budget-patient-info");if(!id){info.style.display="none";return;}const pat=S.patients.find(p=>p.id===id);if(!pat)return;info.style.display="block";info.innerHTML=`<div style="font-weight:500;">${pat.name}</div><div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.convenio].filter(Boolean).join(" · ")}</div>`;if(pat.convenio)document.getElementById("budget-convenio").value=pat.convenio;};
+function renderBudgetCatChips(){const el=document.getElementById("budget-cat-chips");if(!el)return;el.innerHTML=["all",...CATS].map(c=>`<span style="display:inline-block;padding:4px 10px;border-radius:var(--radius);font-size:12px;background:${S.budgetFilterCat===c?"var(--gold)":"var(--bg2)"};color:${S.budgetFilterCat===c?"#fff":"var(--text2)"};margin-right:4px;margin-bottom:6px;cursor:pointer;border:0.5px solid ${S.budgetFilterCat===c?"var(--gold)":"var(--border)"};" onclick="setBudgetCat('${c}')">${c==="all"?"Todos":c}</span>`).join("");}
+window.setBudgetCat=function(c){S.budgetFilterCat=c;renderBudgetCatChips();renderBudgetProcList();};
+window.filterBudgetProcs=function(){S.budgetFilterText=document.getElementById("budget-proc-search")?.value?.toLowerCase()||"";renderBudgetProcList();};
+function renderBudgetProcList(){const filtered=S.priceList.filter(p=>(S.budgetFilterCat==="all"||p.cat===S.budgetFilterCat)&&(!S.budgetFilterText||p.name.toLowerCase().includes(S.budgetFilterText)));const el=document.getElementById("budget-proc-list");if(!el)return;if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:1rem;">Sin resultados</div>`;return;}el.innerHTML=filtered.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:0.5px solid var(--border);font-size:13px;" onclick="addBudgetLine('${p.id}')" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''"><div><div>${p.name}</div><div style="font-size:11px;color:var(--text3);">${p.cat}</div></div><div style="font-size:12px;color:var(--text2);white-space:nowrap;margin-left:8px;">${fmt(p.price)}</div></div>`).join("");}
+window.addBudgetLine=function(pid){const p=S.priceList.find(x=>x.id===pid);if(!p)return;S.budgetLines.push({lid:S.nextBudgetLineId++,name:p.name,price:p.price,qty:1,discount:0});renderBudgetLines();};
+window.removeBudgetLine=function(lid){S.budgetLines=S.budgetLines.filter(l=>l.lid!==lid);renderBudgetLines();};
+window.updateBudgetLine=function(lid,field,val){const l=S.budgetLines.find(x=>x.lid===lid);if(!l)return;if(field==="qty")l.qty=Math.max(1,parseInt(val)||1);if(field==="discount")l.discount=Math.min(100,Math.max(0,parseFloat(val)||0));renderBudgetLines();};
+function renderBudgetLines(){const el=document.getElementById("budget-lines-area");const ta=document.getElementById("budget-totals-area");if(!S.budgetLines.length){el.innerHTML=`<div class="empty-state" style="padding:1.5rem;">Selecciona procedimientos</div>`;ta.style.display="none";return;}el.innerHTML=`<div class="bh-row"><div>Procedimiento</div><div style="text-align:center;">Cant.</div><div style="text-align:center;">Desc.%</div><div style="text-align:right;">Total</div><div></div></div>`+S.budgetLines.map(l=>{const base=l.price*l.qty,total=base*(1-l.discount/100),hd=l.discount>0;return`<div class="b-line"><div><div style="font-size:13px;">${l.name}</div><div style="font-size:11px;color:var(--text3);">${fmt(l.price)} c/u</div></div><input type="number" min="1" value="${l.qty}" onchange="updateBudgetLine(${l.lid},'qty',this.value)" style="padding:5px 6px;text-align:center;"><input type="number" min="0" max="100" value="${l.discount}" placeholder="0" onchange="updateBudgetLine(${l.lid},'discount',this.value)" style="padding:5px 6px;text-align:center;"><div style="text-align:right;">${hd?`<div class="lo">${fmt(base)}</div>`:""}<div class="lf${hd?" disc":""}">${fmt(total)}</div></div><button class="btn btn-danger btn-sm" style="padding:4px 6px;" onclick="removeBudgetLine(${l.lid})">✕</button></div>`;}).join("");let sub=0,tot=0;S.budgetLines.forEach(l=>{sub+=l.price*l.qty;tot+=l.price*l.qty*(1-l.discount/100);});const hd=sub!==tot;ta.style.display="block";ta.innerHTML=`<div class="totals-row"><div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Subtotal</div><div style="font-size:14px;font-weight:500;">${fmt(sub)}</div></div>${hd?`<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Descuento</div><div style="font-size:14px;font-weight:500;color:var(--danger);">-${fmt(sub-tot)}</div></div>`:""}<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);font-weight:500;">Total</div><div style="font-size:17px;font-weight:600;color:${hd?"var(--success)":"var(--text)"};">${fmt(tot)}</div></div></div>`;}
+function getBT(){let s=0,t=0;S.budgetLines.forEach(l=>{s+=l.price*l.qty;t+=l.price*l.qty*(1-l.discount/100);});return{subtotal:s,total:t,discount:s-t};}
+window.clearBudget=function(){S.budgetLines=[];S.nextBudgetLineId=1;renderBudgetLines();document.getElementById("budget-preview-section").style.display="none";document.getElementById("budget-obs").value="";const sel=document.getElementById("budget-patient-select");if(sel)sel.value="";const info=document.getElementById("budget-patient-info");if(info)info.style.display="none";};
+window.saveBudget=async function(){if(!S.budgetLines.length){alert("Agrega procedimientos");return;}const patId=document.getElementById("budget-patient-select").value;if(!patId){alert("Selecciona un paciente");return;}const{subtotal,total,discount}=getBT();const data={number:S.budgetCounter,date:document.getElementById("budget-date").value,convenio:document.getElementById("budget-convenio").value,validez:document.getElementById("budget-validez").value,obs:document.getElementById("budget-obs").value,lines:S.budgetLines.map(({lid,...r})=>r),subtotal,total,discount,patientId:patId,createdAt:new Date().toISOString()};try{await addDoc(collection(db,"patients",patId,"budgets"),data);await setDoc(doc(db,"config","budgetCounter"),{value:S.budgetCounter+1});S.budgetCounter++;toast("✓ Presupuesto guardado");previewBudget();}catch(e){toast("⚠ Error");console.error(e);}};
+function buildBudgetHTML(prof,pat,b){const{subtotal,total,discount,date,validez,convenio,obs,number,lines}=b;const hd=(discount||0)>0;const rows=(lines||[]).map(l=>{const lt=l.price*l.qty*(1-(l.discount||0)/100);return`<tr><td style="padding:8px 10px;border-bottom:0.5px solid #eee;">${l.name}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:center;">${l.qty}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:right;">${fmt(l.price)}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:center;">${l.discount>0?l.discount+"%":"—"}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:right;font-weight:500;${l.discount>0?"color:#1a7a4a":""}">${fmt(lt)}</td></tr>`;}).join("");return`<div style="font-family:Arial,sans-serif;font-size:13px;color:#222;"><div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2px solid #b8952a;margin-bottom:20px;"><div><div style="font-size:22px;font-weight:700;color:#b8952a;">${prof.name||"Dra. Catalina Campos V."}</div><div style="font-size:12px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;">${prof.spec||"Cirujana Dentista"}</div>${prof.rut?`<div style="font-size:12px;color:#888;">RUT: ${prof.rut}</div>`:""}</div><div style="text-align:right;font-size:12px;color:#666;line-height:1.7;"><div style="font-size:15px;font-weight:700;color:#b8952a;">PRESUPUESTO Nº ${number||"—"}</div><div>Fecha: ${date?new Date(date+"T12:00:00").toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"}):""}</div><div>Válido por: ${validez||"30 días"}</div></div></div><div style="background:#fdf8ee;border-radius:6px;padding:12px 16px;margin-bottom:16px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b8952a;margin-bottom:6px;">Paciente</div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">${pat.name}</div><div style="font-size:12px;color:#666;">${[pat.rut?"RUT: "+pat.rut:"",pat.phone,pat.email].filter(Boolean).join(" · ")}</div>${convenio?`<div style="font-size:12px;color:#666;margin-top:3px;">Convenio: ${convenio}</div>`:""}</div><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#b8952a;"><th style="padding:8px 10px;text-align:left;font-size:11px;color:#fff;">Prestación</th><th style="padding:8px 10px;text-align:center;font-size:11px;color:#fff;width:50px;">Cant.</th><th style="padding:8px 10px;text-align:right;font-size:11px;color:#fff;width:110px;">Precio unit.</th><th style="padding:8px 10px;text-align:center;font-size:11px;color:#fff;width:65px;">Dcto.</th><th style="padding:8px 10px;text-align:right;font-size:11px;color:#fff;width:110px;">Total</th></tr></thead><tbody>${rows}</tbody></table><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid #ddd;"><div style="display:flex;justify-content:space-between;width:240px;font-size:13px;"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>${hd?`<div style="display:flex;justify-content:space-between;width:240px;font-size:13px;color:#a32d2d;"><span>Descuento</span><span>-${fmt(discount)}</span></div>`:""}<div style="display:flex;justify-content:space-between;width:240px;font-size:16px;font-weight:700;padding-top:8px;border-top:1.5px solid #b8952a;margin-top:4px;"><span>Total a pagar</span><span style="color:${hd?"#1a7a4a":"#222"}">${fmt(total)}</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;"><div style="border-top:1px solid #999;padding-top:6px;font-size:12px;color:#666;text-align:center;">${prof.name||"Dra. Catalina Campos V."}<br>${prof.spec||"Cirujana Dentista"}</div><div style="border-top:1px solid #999;padding-top:6px;font-size:12px;color:#666;text-align:center;">Firma Paciente y/o Apoderado</div></div>${obs?`<div style="margin-top:24px;background:#f5f5f5;padding:10px 12px;border-radius:4px;font-size:12px;"><b>Observaciones:</b> ${obs}</div>`:""}<div style="margin-top:24px;padding-top:12px;border-top:0.5px solid #ddd;font-size:11px;color:#999;text-align:center;">${prof.footer||"Presupuesto referencial."}</div></div>`;}
+window.previewBudget=function(){if(!S.budgetLines.length){alert("Agrega procedimientos primero");return;}const patId=document.getElementById("budget-patient-select").value;const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente",rut:"",phone:"",email:""};const{subtotal,total,discount}=getBT();const b={subtotal,total,discount,date:document.getElementById("budget-date").value,validez:document.getElementById("budget-validez").value,convenio:document.getElementById("budget-convenio").value,obs:document.getElementById("budget-obs").value,number:S.budgetCounter,lines:S.budgetLines};document.getElementById("budget-preview-content").innerHTML=buildBudgetHTML(S.profile,pat,b);document.getElementById("budget-preview-section").style.display="block";setTimeout(()=>document.getElementById("budget-preview-section").scrollIntoView({behavior:"smooth",block:"start"}),50);};
+window.downloadBudgetPDF=function(){genPDF(document.getElementById("budget-preview-content").innerHTML,`presupuesto_${S.budgetCounter}.pdf`);};
+window.downloadSavedPDF=function(bJson,patId){try{const b=JSON.parse(bJson.replace(/'/g,'"'));const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente"};genPDF(buildBudgetHTML(S.profile,pat,b),`presupuesto_${b.number}.pdf`);}catch(e){toast("⚠ Error al generar PDF");console.error(e);}};
+function genPDF(html,filename){const w=document.createElement("div");w.style.cssText="width:750px;padding:40px 48px;font-family:Arial,sans-serif;background:#fff;";w.innerHTML=html;document.body.appendChild(w);html2pdf().set({margin:0,filename,image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:"px",format:"a4",orientation:"portrait"}}).from(w).save().then(()=>document.body.removeChild(w));}
 
-window.saveCita = async function() {
-  const type = document.getElementById('cita-type').value;
-  const date = document.getElementById('cita-date').value;
-  const time = document.getElementById('cita-time').value;
-  const duration = parseInt(document.getElementById('cita-duration').value);
-  const clinic = document.getElementById('cita-clinic').value;
-  const notes = document.getElementById('cita-notes').value;
-  let eventData = {type, date, time, duration, clinic, notes, createdAt: new Date().toISOString()};
-  if(type==='cita') {
-    const pid = document.getElementById('cita-patient').value;
-    const pat = state.patients.find(p=>p.id===pid);
-    eventData.patientId = pid;
-    eventData.patientName = pat ? pat.name : '';
-  } else {
-    eventData.label = document.getElementById('cita-bloqueo-label').value || 'Bloqueado';
-  }
-  try {
-    const r = await addDoc(collection(db,'agenda'), eventData);
-    state.agendaEvents.push({...eventData, id:r.id});
-    closeModal('modal-cita');
-    renderAgenda();
-    toast('✓ Guardado');
-  } catch(e) { toast('⚠ Error al guardar'); }
-};
+// PRICES
+let priceFormOpen=false;
+window.togglePriceForm=function(){priceFormOpen=!priceFormOpen;document.getElementById("price-new-form").style.display=priceFormOpen?"block":"none";if(priceFormOpen)document.getElementById("np-name").focus();};
+window.saveNewPrice=async function(){const name=document.getElementById("np-name").value.trim();const cat=document.getElementById("np-cat").value;const price=parseFloat(document.getElementById("np-price").value)||0;if(!name){alert("Ingresa el nombre");return;}try{const r=await addDoc(collection(db,"prices"),{name,cat,price});S.priceList.push({id:r.id,name,cat,price});document.getElementById("np-name").value="";document.getElementById("np-price").value="";togglePriceForm();renderPricesTable();renderBudgetProcList();toast("✓ Guardado");}catch(e){toast("⚠ Error");}};
+window.updatePrice=async function(id,field,val){const p=S.priceList.find(x=>x.id===id);if(!p)return;if(field==="price")p.price=parseFloat(val)||0;else p[field]=val;try{const{id:pid,...data}=p;await updateDoc(doc(db,"prices",pid),data);renderBudgetProcList();}catch(e){toast("⚠ Error");}};
+window.deletePrice=async function(id){if(!confirm("¿Eliminar?"))return;S.priceList=S.priceList.filter(p=>p.id!==id);try{await deleteDoc(doc(db,"prices",id));renderPricesTable();renderBudgetProcList();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
+function renderPricesTable(){const tbody=document.getElementById("prices-tbody");if(!tbody)return;const count=document.getElementById("prices-count");if(count)count.textContent=`(${S.priceList.length})`;tbody.innerHTML=S.priceList.map(p=>`<tr><td><input type="text" value="${p.name.replace(/"/g,"&quot;")}" style="border:none;background:transparent;font-size:13px;" onchange="updatePrice('${p.id}','name',this.value)"></td><td><select style="font-size:12px;padding:3px 6px;" onchange="updatePrice('${p.id}','cat',this.value)">${CATS.map(c=>`<option${c===p.cat?" selected":""}>${c}</option>`).join("")}</select></td><td style="text-align:right;"><input type="number" value="${p.price}" min="0" style="width:110px;text-align:right;border:none;background:transparent;" onchange="updatePrice('${p.id}','price',this.value)"></td><td><button class="btn btn-danger btn-sm" onclick="deletePrice('${p.id}')">🗑</button></td></tr>`).join("");}
 
-window.viewEvent = function(id) {
-  const ev = state.agendaEvents.find(e=>e.id===id);
-  if(!ev) return;
-  document.getElementById('modal-cita-title').textContent = ev.type==='bloqueo'?'Horario bloqueado':'Cita';
-  document.getElementById('modal-cita-body').innerHTML = `
-    <div style="font-size:13px;line-height:1.8;">
-      ${ev.type==='bloqueo'?`<div><strong>Motivo:</strong> ${ev.label}</div>`:`<div><strong>Paciente:</strong> ${ev.patientName}</div>`}
-      <div><strong>Fecha:</strong> ${fmtDate(ev.date)}</div>
-      <div><strong>Hora:</strong> ${ev.time} — ${ev.duration} min</div>
-      <div><strong>Clínica:</strong> ${ev.clinic}</div>
-      ${ev.notes?`<div><strong>Notas:</strong> ${ev.notes}</div>`:''}
-    </div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <button class="btn btn-danger" onclick="deleteEvent('${id}')">🗑 Eliminar</button>
-      <button class="btn" onclick="closeModal('modal-cita')">Cerrar</button>
-    </div>`;
-  openModal('modal-cita');
-};
+// PROFILE
+function loadProfileForm(){const p=S.profile;["name","spec","rut","reg","phone","email","footer"].forEach(f=>{const el=document.getElementById("prof-"+f);if(el)el.value=p[f]||"";});}
+window.saveProfile=async function(){["name","spec","rut","reg","phone","email","footer"].forEach(f=>{const el=document.getElementById("prof-"+f);if(el)S.profile[f]=el.value;});try{await setDoc(doc(db,"config","profile"),S.profile);toast("✓ Perfil guardado");}catch(e){toast("⚠ Error");}};
 
-window.deleteEvent = async function(id) {
-  if(!confirm('¿Eliminar este evento?')) return;
-  try {
-    await deleteDoc(doc(db,'agenda',id));
-    state.agendaEvents = state.agendaEvents.filter(e=>e.id!==id);
-    closeModal('modal-cita');
-    renderAgenda();
-    toast('✓ Eliminado');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-// ---- PATIENTS ----
-window.filterPatients = function() { renderPatientList(); };
-
-function renderPatientList() {
-  const q = document.getElementById('patient-search')?.value?.toLowerCase()||'';
-  const filtered = state.patients.filter(p => p.name.toLowerCase().includes(q) || (p.rut||'').includes(q));
-  const el = document.getElementById('patient-list');
-  if(!el) return;
-  if(!filtered.length) { el.innerHTML='<div class="empty-state" style="padding:2rem;">Sin resultados</div>'; return; }
-  el.innerHTML = filtered.map(p => `
-    <div class="patient-row" onclick="openPatient('${p.id}')">
-      <div class="patient-avatar">${initials(p.name)}</div>
-      <div>
-        <div class="patient-name">${p.name}</div>
-        <div class="patient-sub">${p.rut||''} ${p.phone?'· '+p.phone:''}</div>
-      </div>
-    </div>`).join('');
-}
-
-window.openNewPatientModal = function() {
-  document.getElementById('modal-paciente-title').textContent = 'Nuevo paciente';
-  document.getElementById('modal-paciente-body').innerHTML = patientFormHTML(null);
-  openModal('modal-paciente');
-};
-
-function patientFormHTML(pat) {
-  return `
-    <div class="grid-2">
-      <div class="field"><label>Nombre completo *</label><input type="text" id="pf-name" value="${pat?.name||''}" placeholder="Nombre Apellido"></div>
-      <div class="field"><label>RUT</label><input type="text" id="pf-rut" value="${pat?.rut||''}" placeholder="12.345.678-9"></div>
-    </div>
-    <div class="grid-2">
-      <div class="field"><label>Fecha de nacimiento</label><input type="date" id="pf-dob" value="${pat?.dob||''}"></div>
-      <div class="field"><label>Sexo</label><select id="pf-sex"><option value="">—</option><option${pat?.sex==='F'?' selected':''}>F</option><option${pat?.sex==='M'?' selected':''}>M</option></select></div>
-    </div>
-    <div class="grid-2">
-      <div class="field"><label>Teléfono</label><input type="text" id="pf-phone" value="${pat?.phone||''}" placeholder="+56 9 ..."></div>
-      <div class="field"><label>Email</label><input type="email" id="pf-email" value="${pat?.email||''}" placeholder="paciente@mail.com"></div>
-    </div>
-    <div class="field"><label>Dirección</label><input type="text" id="pf-address" value="${pat?.address||''}" placeholder="Calle, ciudad..."></div>
-    <div class="field"><label>Convenio</label><input type="text" id="pf-convenio" value="${pat?.convenio||''}" placeholder="Fonasa, Isapre..."></div>
-    <div class="field"><label>Antecedentes médicos relevantes</label><textarea id="pf-medical" rows="3" placeholder="Alergias, medicamentos, enfermedades sistémicas, embarazo...">${pat?.medical||''}</textarea></div>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button class="btn btn-gold" style="flex:1;" onclick="savePatient(${pat?`'${pat.id}'`:'null'})">💾 Guardar paciente</button>
-      <button class="btn" onclick="closeModal('modal-paciente')">Cancelar</button>
-    </div>`;
-}
-
-window.savePatient = async function(id) {
-  const name = document.getElementById('pf-name').value.trim();
-  if(!name) { alert('El nombre es obligatorio'); return; }
-  const data = {
-    name,
-    rut: document.getElementById('pf-rut').value,
-    dob: document.getElementById('pf-dob').value,
-    sex: document.getElementById('pf-sex').value,
-    phone: document.getElementById('pf-phone').value,
-    email: document.getElementById('pf-email').value,
-    address: document.getElementById('pf-address').value,
-    convenio: document.getElementById('pf-convenio').value,
-    medical: document.getElementById('pf-medical').value,
-    updatedAt: new Date().toISOString()
-  };
-  try {
-    if(id) {
-      await updateDoc(doc(db,'patients',id), data);
-      const idx = state.patients.findIndex(p=>p.id===id);
-      if(idx>=0) state.patients[idx] = {...state.patients[idx], ...data};
-    } else {
-      data.createdAt = new Date().toISOString();
-      const r = await addDoc(collection(db,'patients'), data);
-      state.patients.push({...data, id:r.id});
-      state.patients.sort((a,b)=>a.name.localeCompare(b.name));
-    }
-    closeModal('modal-paciente');
-    renderPatientList();
-    populateBudgetPatientSelect();
-    if(state.selectedPatientId) openPatient(state.selectedPatientId);
-    toast('✓ Paciente guardado');
-  } catch(e) { toast('⚠ Error al guardar'); console.error(e); }
-};
-
-window.openPatient = async function(id) {
-  state.selectedPatientId = id;
-  const pat = state.patients.find(p=>p.id===id);
-  if(!pat) return;
-
-  // Load patient sub-collections
-  let budgets=[], evolutions=[], abonos=[], xrays=[];
-  try {
-    const bs = await getDocs(collection(db,'patients',id,'budgets'));
-    bs.forEach(d=>budgets.push({...d.data(),id:d.id}));
-    budgets.sort((a,b)=>b.createdAt?.localeCompare(a.createdAt||'')||0);
-
-    const es = await getDocs(collection(db,'patients',id,'evolutions'));
-    es.forEach(d=>evolutions.push({...d.data(),id:d.id}));
-    evolutions.sort((a,b)=>b.date?.localeCompare(a.date||'')||0);
-
-    const abs = await getDocs(collection(db,'patients',id,'abonos'));
-    abs.forEach(d=>abonos.push({...d.data(),id:d.id}));
-    abonos.sort((a,b)=>b.date?.localeCompare(a.date||'')||0);
-
-    const xs = await getDocs(collection(db,'patients',id,'xrays'));
-    xs.forEach(d=>xrays.push({...d.data(),id:d.id}));
-  } catch(e) { console.error(e); }
-
-  const totalAbonos = abonos.reduce((s,a)=>s+(a.amount||0),0);
-  const totalPresup = budgets.reduce((s,b)=>s+(b.total||0),0);
-  const saldo = totalPresup - totalAbonos;
-
-  const panel = document.getElementById('patient-detail-panel');
-  panel.innerHTML = `
-    <div class="card" style="margin-bottom:0.5rem;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div class="patient-avatar" style="width:48px;height:48px;font-size:18px;">${initials(pat.name)}</div>
-          <div>
-            <div style="font-size:17px;font-weight:600;">${pat.name}</div>
-            <div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.email].filter(Boolean).join(' · ')}</div>
-            ${pat.convenio?`<div class="badge badge-gold" style="margin-top:4px;">${pat.convenio}</div>`:''}
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <button class="btn btn-sm" onclick="editPatient('${id}')">✏️ Editar</button>
-          <button class="btn btn-gold btn-sm" onclick="newBudgetForPatient('${id}')">📄 Nuevo presupuesto</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-row">
-      <button class="tab-btn active" onclick="switchPatientTab('info','${id}')">Ficha</button>
-      <button class="tab-btn" onclick="switchPatientTab('budgets','${id}')">Presupuestos</button>
-      <button class="tab-btn" onclick="switchPatientTab('evolutions','${id}')">Evoluciones</button>
-      <button class="tab-btn" onclick="switchPatientTab('abonos','${id}')">Abonos</button>
-      <button class="tab-btn" onclick="switchPatientTab('xrays','${id}')">Radiografías</button>
-    </div>
-
-    <!-- FICHA -->
-    <div class="tab-panel active" id="pt-info">
-      <div class="card">
-        <div class="section-title">Datos personales</div>
-        <div class="grid-2">
-          ${[['Nombre',pat.name],['RUT',pat.rut],['Nacimiento',pat.dob?fmtDate(pat.dob):'—'],['Sexo',pat.sex||'—'],['Teléfono',pat.phone||'—'],['Email',pat.email||'—'],['Dirección',pat.address||'—'],['Convenio',pat.convenio||'—']].map(([l,v])=>`<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--text3);">${l}</div><div style="font-size:13px;">${v||'—'}</div></div>`).join('')}
-        </div>
-        ${pat.medical?`<div style="margin-top:8px;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;">ANTECEDENTES MÉDICOS</div><div style="background:var(--warn-bg);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 var(--radius) var(--radius) 0;font-size:13px;">${pat.medical}</div></div>`:''}
-      </div>
-    </div>
-
-    <!-- PRESUPUESTOS -->
-    <div class="tab-panel" id="pt-budgets">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div class="section-title" style="margin:0;">Presupuestos</div>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <span style="font-size:13px;">Total: <strong>${fmt(totalPresup)}</strong> | Abonado: <strong style="color:var(--success);">${fmt(totalAbonos)}</strong> | Saldo: <strong style="color:${saldo>0?'var(--danger)':'var(--success)'};">${fmt(saldo)}</strong></span>
-          </div>
-        </div>
-        ${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Detalle</th><th></th></tr></thead><tbody>
-          ${budgets.map(b=>`<tr>
-            <td><span class="badge badge-gold">Nº ${b.number||'—'}</span></td>
-            <td>${fmtDate(b.date)}</td>
-            <td style="font-weight:500;">${fmt(b.total||0)}</td>
-            <td style="font-size:12px;color:var(--text2);">${(b.lines||[]).map(l=>l.name).join(', ').substring(0,60)}</td>
-            <td><button class="btn btn-sm btn-gold" onclick="downloadSavedBudgetPDF('${JSON.stringify(b).replace(/'/g,"\\'")}','${pat.id}')">PDF</button></td>
-          </tr>`).join('')}
-        </tbody></table>`:
-        '<div class="empty-state">Sin presupuestos</div>'}
-      </div>
-    </div>
-
-    <!-- EVOLUCIONES -->
-    <div class="tab-panel" id="pt-evolutions">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div class="section-title" style="margin:0;">Evoluciones clínicas</div>
-          <button class="btn btn-gold btn-sm" onclick="openEvolutionModal('${id}')">+ Agregar evolución</button>
-        </div>
-        ${evolutions.length?evolutions.map(e=>`
-          <div class="evol-row">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-              <div>
-                <div class="evol-date">${fmtDate(e.date)}</div>
-                <div class="evol-clinic">${e.clinic||''}</div>
-                <div class="evol-text">${e.text}</div>
-                ${e.treatment?`<div style="font-size:11px;color:var(--text2);margin-top:4px;">Tratamiento realizado: <strong>${e.treatment}</strong></div>`:''}
-              </div>
-              <button class="btn btn-sm btn-danger" onclick="deleteEvolution('${id}','${e.id}')">✕</button>
-            </div>
-          </div>`).join(''):
-          '<div class="empty-state">Sin evoluciones</div>'}
-      </div>
-    </div>
-
-    <!-- ABONOS -->
-    <div class="tab-panel" id="pt-abonos">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div class="section-title" style="margin:0;">Control de abonos</div>
-          <button class="btn btn-gold btn-sm" onclick="openAbonoModal('${id}')">+ Agregar abono</button>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
-          <div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:12px;color:var(--text2);">Total presupuestado</div><div style="font-size:17px;font-weight:600;">${fmt(totalPresup)}</div></div>
-          <div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:12px;color:var(--text2);">Total abonado</div><div style="font-size:17px;font-weight:600;color:var(--success);">${fmt(totalAbonos)}</div></div>
-          <div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:12px;color:var(--text2);">Saldo pendiente</div><div style="font-size:17px;font-weight:600;color:${saldo>0?'var(--danger)':'var(--success)'};">${fmt(saldo)}</div></div>
-        </div>
-        ${abonos.length?abonos.map(a=>`
-          <div class="abono-row">
-            <div><div style="font-size:13px;font-weight:500;">${fmt(a.amount)}</div><div style="font-size:11px;color:var(--text3);">${fmtDate(a.date)} ${a.method?'· '+a.method:''}</div>${a.note?`<div style="font-size:12px;color:var(--text2);">${a.note}</div>`:''}</div>
-            <button class="btn btn-sm btn-danger" onclick="deleteAbono('${id}','${a.id}')">✕</button>
-          </div>`).join(''):
-          '<div class="empty-state">Sin abonos registrados</div>'}
-      </div>
-    </div>
-
-    <!-- RADIOGRAFÍAS -->
-    <div class="tab-panel" id="pt-xrays">
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <div class="section-title" style="margin:0;">Radiografías</div>
-          <label class="btn btn-gold btn-sm" style="cursor:pointer;">+ Subir imagen<input type="file" accept="image/*" style="display:none;" onchange="uploadXray(event,'${id}')"></label>
-        </div>
-        <div id="xrays-grid-${id}" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
-          ${xrays.length?xrays.map(x=>`
-            <div style="position:relative;border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border);">
-              <img src="${x.url}" style="width:100%;height:120px;object-fit:cover;" onclick="window.open('${x.url}')">
-              <div style="padding:4px 6px;font-size:11px;color:var(--text2);">${fmtDate(x.date)}</div>
-              <button class="btn btn-danger btn-sm" style="position:absolute;top:4px;right:4px;padding:2px 6px;" onclick="deleteXray('${id}','${x.id}')">✕</button>
-            </div>`).join(''):
-            '<div class="empty-state" style="grid-column:1/-1;">Sin radiografías</div>'}
-        </div>
-      </div>
-    </div>
-  `;
-};
-
-window.switchPatientTab = function(tab, patId) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(tab==='info'?'ficha':tab==='budgets'?'presupuesto':tab==='evolutions'?'evol':tab==='abonos'?'abono':tab)));
-  ['info','budgets','evolutions','abonos','xrays'].forEach(t => {
-    const el = document.getElementById('pt-'+t);
-    if(el) el.classList.toggle('active', t===tab);
-  });
-};
-
-window.editPatient = function(id) {
-  const pat = state.patients.find(p=>p.id===id);
-  if(!pat) return;
-  document.getElementById('modal-paciente-title').textContent = 'Editar paciente';
-  document.getElementById('modal-paciente-body').innerHTML = patientFormHTML(pat);
-  openModal('modal-paciente');
-};
-
-// EVOLUTION
-window.openEvolutionModal = function(patId) {
-  document.getElementById('modal-cita-title').textContent = 'Nueva evolución';
-  document.getElementById('modal-cita-body').innerHTML = `
-    <div class="field"><label>Fecha</label><input type="date" id="ev-date" value="${new Date().toISOString().split('T')[0]}"></div>
-    <div class="field"><label>Clínica</label><select id="ev-clinic">${CLINICS.map(c=>`<option>${c}</option>`).join('')}</select></div>
-    <div class="field"><label>Tratamiento realizado</label><input type="text" id="ev-treatment" placeholder="Ej: Obturación pieza 2.6, Limpieza..."></div>
-    <div class="field"><label>Evolución / Notas clínicas</label><textarea id="ev-text" rows="4" placeholder="Descripción de la sesión, observaciones..."></textarea></div>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button class="btn btn-gold" style="flex:1;" onclick="saveEvolution('${patId}')">Guardar</button>
-      <button class="btn" onclick="closeModal('modal-cita')">Cancelar</button>
-    </div>`;
-  openModal('modal-cita');
-};
-
-window.saveEvolution = async function(patId) {
-  const data = {
-    date: document.getElementById('ev-date').value,
-    clinic: document.getElementById('ev-clinic').value,
-    treatment: document.getElementById('ev-treatment').value,
-    text: document.getElementById('ev-text').value,
-    createdAt: new Date().toISOString()
-  };
-  if(!data.text) { alert('Ingresa las notas de la evolución'); return; }
-  try {
-    await addDoc(collection(db,'patients',patId,'evolutions'), data);
-    closeModal('modal-cita');
-    openPatient(patId);
-    toast('✓ Evolución guardada');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-window.deleteEvolution = async function(patId, evId) {
-  if(!confirm('¿Eliminar esta evolución?')) return;
-  try {
-    await deleteDoc(doc(db,'patients',patId,'evolutions',evId));
-    openPatient(patId);
-    toast('✓ Eliminada');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-// ABONOS
-window.openAbonoModal = function(patId) {
-  document.getElementById('modal-cita-title').textContent = 'Registrar abono';
-  document.getElementById('modal-cita-body').innerHTML = `
-    <div class="field"><label>Monto (CLP)</label><input type="number" id="ab-amount" placeholder="0" min="0"></div>
-    <div class="field"><label>Fecha</label><input type="date" id="ab-date" value="${new Date().toISOString().split('T')[0]}"></div>
-    <div class="field"><label>Método de pago</label>
-      <select id="ab-method"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select>
-    </div>
-    <div class="field"><label>Nota</label><input type="text" id="ab-note" placeholder="Ej: Abono tratamiento ortodoncia..."></div>
-    <div style="display:flex;gap:8px;margin-top:8px;">
-      <button class="btn btn-gold" style="flex:1;" onclick="saveAbono('${patId}')">Guardar</button>
-      <button class="btn" onclick="closeModal('modal-cita')">Cancelar</button>
-    </div>`;
-  openModal('modal-cita');
-};
-
-window.saveAbono = async function(patId) {
-  const amount = parseFloat(document.getElementById('ab-amount').value)||0;
-  if(!amount) { alert('Ingresa el monto'); return; }
-  const data = {
-    amount,
-    date: document.getElementById('ab-date').value,
-    method: document.getElementById('ab-method').value,
-    note: document.getElementById('ab-note').value,
-    createdAt: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'patients',patId,'abonos'), data);
-    closeModal('modal-cita');
-    openPatient(patId);
-    toast('✓ Abono registrado');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-window.deleteAbono = async function(patId, abId) {
-  if(!confirm('¿Eliminar este abono?')) return;
-  try {
-    await deleteDoc(doc(db,'patients',patId,'abonos',abId));
-    openPatient(patId);
-    toast('✓ Eliminado');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-// XRAYS
-window.uploadXray = async function(event, patId) {
-  const file = event.target.files[0];
-  if(!file) return;
-  toast('⟳ Subiendo imagen...');
-  try {
-    const r = ref(storage, `xrays/${patId}/${Date.now()}_${file.name}`);
-    await uploadBytes(r, file);
-    const url = await getDownloadURL(r);
-    const data = {url, date: new Date().toISOString().split('T')[0], name: file.name, createdAt: new Date().toISOString()};
-    await addDoc(collection(db,'patients',patId,'xrays'), data);
-    openPatient(patId);
-    toast('✓ Radiografía subida');
-  } catch(e) { toast('⚠ Error al subir'); console.error(e); }
-};
-
-window.deleteXray = async function(patId, xId) {
-  if(!confirm('¿Eliminar esta radiografía?')) return;
-  try {
-    await deleteDoc(doc(db,'patients',patId,'xrays',xId));
-    openPatient(patId);
-    toast('✓ Eliminada');
-  } catch(e) { toast('⚠ Error'); }
-};
-
-// ---- BUDGET ----
-window.newBudgetForPatient = function(patId) {
-  showPage('nuevo-budget');
-  setTimeout(() => {
-    const sel = document.getElementById('budget-patient-select');
-    if(sel) { sel.value=patId; selectBudgetPatient(); }
-  }, 100);
-};
-
-function populateBudgetPatientSelect() {
-  const sel = document.getElementById('budget-patient-select');
-  if(!sel) return;
-  sel.innerHTML = '<option value="">— Seleccionar paciente —</option>' +
-    state.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
-}
-
-window.selectBudgetPatient = function() {
-  const id = document.getElementById('budget-patient-select').value;
-  const info = document.getElementById('budget-patient-info');
-  if(!id) { info.style.display='none'; return; }
-  const pat = state.patients.find(p=>p.id===id);
-  if(!pat) return;
-  info.style.display='block';
-  info.innerHTML=`<div style="font-weight:500;">${pat.name}</div><div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.convenio].filter(Boolean).join(' · ')}</div>`;
-  if(pat.convenio) document.getElementById('budget-convenio').value = pat.convenio;
-};
-
-function renderBudgetCatChips() {
-  const el=document.getElementById('budget-cat-chips');
-  if(!el) return;
-  el.innerHTML=['all',...CATS].map(c=>`<span style="display:inline-block;padding:4px 10px;border-radius:var(--radius);font-size:12px;background:${state.budgetFilterCat===c?'var(--gold)':'var(--bg2)'};color:${state.budgetFilterCat===c?'#fff':'var(--text2)'};margin-right:4px;margin-bottom:6px;cursor:pointer;border:0.5px solid ${state.budgetFilterCat===c?'var(--gold)':'var(--border)'};" onclick="setBudgetCat('${c}')">${c==='all'?'Todos':c}</span>`).join('');
-}
-
-window.setBudgetCat = function(c) { state.budgetFilterCat=c; renderBudgetCatChips(); renderBudgetProcList(); };
-window.filterBudgetProcs = function() { state.budgetFilterText=document.getElementById('budget-proc-search')?.value?.toLowerCase()||''; renderBudgetProcList(); };
-
-function renderBudgetProcList() {
-  const filtered=state.priceList.filter(p=>(state.budgetFilterCat==='all'||p.cat===state.budgetFilterCat)&&(!state.budgetFilterText||p.name.toLowerCase().includes(state.budgetFilterText)));
-  const el=document.getElementById('budget-proc-list');
-  if(!el) return;
-  if(!filtered.length){el.innerHTML='<div class="empty-state" style="padding:1rem;">Sin resultados</div>';return;}
-  el.innerHTML=filtered.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:0.5px solid var(--border);font-size:13px;" onclick="addBudgetLine('${p.id}')" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''">`+
-    `<div><div>${p.name}</div><div style="font-size:11px;color:var(--text3);">${p.cat}</div></div><div style="font-size:12px;color:var(--text2);white-space:nowrap;margin-left:8px;">${fmt(p.price)}</div></div>`).join('');
-}
-
-window.addBudgetLine = function(procId) {
-  const proc=state.priceList.find(p=>p.id===procId);
-  if(!proc) return;
-  state.budgetLines.push({lid:state.nextBudgetLineId++,name:proc.name,price:proc.price,qty:1,discount:0});
-  renderBudgetLines();
-};
-
-window.removeBudgetLine = function(lid) { state.budgetLines=state.budgetLines.filter(l=>l.lid!==lid); renderBudgetLines(); };
-
-window.updateBudgetLine = function(lid,field,val) {
-  const l=state.budgetLines.find(x=>x.lid===lid);
-  if(!l) return;
-  if(field==='qty') l.qty=Math.max(1,parseInt(val)||1);
-  if(field==='discount') l.discount=Math.min(100,Math.max(0,parseFloat(val)||0));
-  renderBudgetLines();
-};
-
-function renderBudgetLines() {
-  const el=document.getElementById('budget-lines-area');
-  const ta=document.getElementById('budget-totals-area');
-  if(!state.budgetLines.length){el.innerHTML='<div class="empty-state" style="padding:1.5rem;">Selecciona procedimientos</div>';ta.style.display='none';return;}
-  el.innerHTML=`<div class="bh-row"><div>Procedimiento</div><div style="text-align:center;">Cant.</div><div style="text-align:center;">Desc.%</div><div style="text-align:right;">Total</div><div></div></div>`+
-    state.budgetLines.map(l=>{const base=l.price*l.qty,total=base*(1-l.discount/100),hd=l.discount>0;
-      return `<div class="b-line"><div><div style="font-size:13px;">${l.name}</div><div style="font-size:11px;color:var(--text3);">${fmt(l.price)} c/u</div></div>
-      <input type="number" min="1" value="${l.qty}" onchange="updateBudgetLine(${l.lid},'qty',this.value)" style="padding:5px 6px;text-align:center;">
-      <input type="number" min="0" max="100" value="${l.discount}" placeholder="0" onchange="updateBudgetLine(${l.lid},'discount',this.value)" style="padding:5px 6px;text-align:center;">
-      <div style="text-align:right;">${hd?`<div class="lo">${fmt(base)}</div>`:''}<div class="lf${hd?' disc':''}">${fmt(total)}</div></div>
-      <button class="btn btn-danger btn-sm" style="padding:4px 6px;" onclick="removeBudgetLine(${l.lid})">✕</button></div>`;}).join('');
-  let subtotal=0,total=0;
-  state.budgetLines.forEach(l=>{subtotal+=l.price*l.qty;total+=l.price*l.qty*(1-l.discount/100);});
-  const hd=subtotal!==total;
-  ta.style.display='block';
-  ta.innerHTML=`<div class="totals-row"><div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Subtotal</div><div style="font-size:14px;font-weight:500;">${fmt(subtotal)}</div></div>${hd?`<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Descuento</div><div style="font-size:14px;font-weight:500;color:var(--danger);">-${fmt(subtotal-total)}</div></div>`:''}<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);font-weight:500;">Total</div><div style="font-size:17px;font-weight:600;color:${hd?'var(--success)':'var(--text)'};">${fmt(total)}</div></div></div>`;
-}
-
-function getBudgetTotals() {
-  let subtotal=0,total=0;
-  state.budgetLines.forEach(l=>{subtotal+=l.price*l.qty;total+=l.price*l.qty*(1-l.discount/100);});
-  return {subtotal,total,discount:subtotal-total};
-}
-
-window.clearBudget = function() {
-  state.budgetLines=[];
-  state.nextBudgetLineId=1;
-  renderBudgetLines();
-  document.getElementById('budget-preview-section').style.display='none';
-  document.getElementById('budget-obs').value='';
-  const sel=document.getElementById('budget-patient-select');
-  if(sel) sel.value='';
-  const info=document.getElementById('budget-patient-info');
-  if(info) info.style.display='none';
-};
-
-window.saveBudget = async function() {
-  if(!state.budgetLines.length){alert('Agrega al menos un procedimiento');return;}
-  const patId=docum
+// INIT
+document.getElementById("budget-date").value=new Date().toISOString().split("T")[0];
+if(window.innerWidth<768)document.getElementById("menu-btn").style.display="block";
+window.addEventListener("resize",()=>{document.getElementById("menu-btn").style.display=window.innerWidth<768?"block":"none";});
+renderAgenda();
+renderClinicSelector();
+loadAll();
+</script>
+</body>
+</html>
