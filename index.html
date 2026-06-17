@@ -4,89 +4,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dra. Catalina Campos — Sistema Dental</title>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{--bg:#fff;--bg2:#f7f7f5;--bg3:#f0efe9;--text:#1a1a1a;--text2:#666;--text3:#999;--border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.22);--gold:#b8952a;--gold-bg:#fdf8ee;--success:#1a7a4a;--success-bg:#eaf3de;--danger:#a32d2d;--danger-bg:#fcebeb;--info:#185fa5;--info-bg:#e6f1fb;--warn:#7a5a00;--warn-bg:#fff8e1;--radius:8px;--radius-lg:12px;--sidebar:220px;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:14px;color:var(--text);background:var(--bg3);min-height:100vh;display:flex;}
-.sidebar{width:var(--sidebar);background:var(--bg);border-right:0.5px solid var(--border2);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;}
-.sidebar-logo{padding:1.25rem 1rem 1rem;border-bottom:0.5px solid var(--border);}
-.sidebar-logo .name{font-size:13px;font-weight:600;color:var(--gold);}
-.sidebar-logo .title{font-size:11px;color:var(--text3);margin-top:2px;}
-.sidebar-nav{flex:1;padding:0.75rem 0;overflow-y:auto;}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;font-size:13px;color:var(--text2);border-left:2px solid transparent;transition:all 0.1s;}
-.nav-item:hover{background:var(--bg2);color:var(--text);}
-.nav-item.active{background:var(--gold-bg);color:var(--gold);border-left-color:var(--gold);font-weight:500;}
-.nav-icon{font-size:16px;width:20px;text-align:center;}
-.sync-status{padding:10px 16px;font-size:11px;border-top:0.5px solid var(--border);color:var(--text3);}
+:root{
+  --bg:#ffffff;--bg2:#fafafa;--bg3:#f5f5f5;--bg4:#f0f0f0;
+  --text:#1a1a1a;--text2:#666;--text3:#999;
+  --border:#ebebeb;--border2:#e0e0e0;
+  --rose:#c9767c;--rose-light:#f7e8e9;--rose-mid:#ecc8ca;
+  --sage:#7a9e87;--sage-light:#eaf2ec;
+  --warm:#b8956a;--warm-light:#f5ede3;
+  --info:#6a8fbf;--info-light:#e8eef7;
+  --danger:#c9767c;--danger-bg:#fdf0f0;
+  --success:#7a9e87;--success-bg:#eaf2ec;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;--sidebar:220px;
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:13px;color:var(--text);background:var(--bg2);min-height:100vh;display:flex;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--bg);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;box-shadow:var(--shadow);}
+.sidebar-logo{padding:1.5rem 1.25rem 1.25rem;border-bottom:1px solid var(--border);}
+.sidebar-logo .name{font-size:12px;font-weight:700;color:var(--rose);letter-spacing:0.04em;text-transform:uppercase;}
+.sidebar-logo .title{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:0.02em;}
+.sidebar-nav{flex:1;padding:0.75rem 0.75rem;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;font-size:12px;color:var(--text2);border-radius:var(--radius);transition:all 0.15s;letter-spacing:0.01em;}
+.nav-item:hover{background:var(--bg3);color:var(--text);}
+.nav-item.active{background:var(--rose-light);color:var(--rose);font-weight:600;}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+.sync-status{padding:10px 1.25rem;font-size:10px;border-top:1px solid var(--border);color:var(--text3);letter-spacing:0.03em;}
+
+/* MAIN */
 .main{margin-left:var(--sidebar);flex:1;min-height:100vh;}
-.topbar{background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.topbar-title{font-size:16px;font-weight:500;}
+.topbar{background:var(--bg);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:var(--shadow);}
+.topbar-title{font-size:15px;font-weight:600;color:var(--text);letter-spacing:0.01em;}
 .page{padding:1.5rem;display:none;}
 .page.active{display:block;}
-label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px;}
-input[type=text],input[type=number],input[type=date],input[type=time],input[type=email],select,textarea{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;}
-input:focus,select:focus,textarea:focus{border-color:var(--gold);}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.field{margin-bottom:12px;}
-.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
-.section-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;}
-.btn{padding:8px 14px;border-radius:var(--radius);border:0.5px solid var(--border2);background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);font-family:inherit;}
-.btn:hover{background:var(--bg2);}
+
+/* FORMS */
+label{font-size:11px;color:var(--text3);display:block;margin-bottom:5px;letter-spacing:0.04em;text-transform:uppercase;font-weight:500;}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=email],select,textarea{width:100%;padding:9px 11px;border:1.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color 0.15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(201,118,124,0.08);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.field{margin-bottom:14px;}
+
+/* CARDS */
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow);}
+.card-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:var(--radius);border:1.5px solid var(--border2);background:var(--bg);cursor:pointer;font-size:12px;color:var(--text2);font-family:inherit;font-weight:500;transition:all 0.15s;letter-spacing:0.01em;}
+.btn:hover{background:var(--bg3);border-color:var(--border2);color:var(--text);}
 .btn:active{transform:scale(0.98);}
-.btn-gold{background:var(--gold);color:#fff;border-color:var(--gold);}
-.btn-gold:hover{opacity:0.88;background:var(--gold);}
-.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text);}
-.btn-sm{padding:5px 10px;font-size:12px;}
-.btn-danger{color:var(--danger);border-color:rgba(163,45,45,0.3);}
+.btn-rose{background:var(--rose);color:#fff;border-color:var(--rose);}
+.btn-rose:hover{background:#b8666c;border-color:#b8666c;color:#fff;}
+.btn-outline-rose{background:transparent;color:var(--rose);border-color:var(--rose-mid);}
+.btn-outline-rose:hover{background:var(--rose-light);}
+.btn-sm{padding:6px 12px;font-size:11px;}
+.btn-danger{color:var(--danger);border-color:var(--rose-mid);}
 .btn-danger:hover{background:var(--danger-bg);}
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
-.badge-gold{background:var(--gold-bg);color:var(--gold);}
-.badge-success{background:var(--success-bg);color:var(--success);}
-.badge-danger{background:var(--danger-bg);color:var(--danger);}
+
+/* BADGES */
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.04em;}
+.badge-rose{background:var(--rose-light);color:var(--rose);}
+.badge-sage{background:var(--sage-light);color:var(--sage);}
+.badge-warm{background:var(--warm-light);color:var(--warm);}
+.badge-info{background:var(--info-light);color:var(--info);}
+
+/* TABLE */
 .table{width:100%;border-collapse:collapse;font-size:13px;}
-.table th{text-align:left;font-size:11px;font-weight:600;color:var(--text2);padding:7px 10px;border-bottom:0.5px solid var(--border2);text-transform:uppercase;letter-spacing:0.04em;}
-.table td{padding:9px 10px;border-bottom:0.5px solid var(--border);}
+.table th{text-align:left;font-size:10px;font-weight:700;color:var(--text3);padding:8px 10px;border-bottom:1.5px solid var(--border2);text-transform:uppercase;letter-spacing:0.06em;}
+.table td{padding:10px 10px;border-bottom:1px solid var(--border);color:var(--text);}
 .table tr:last-child td{border-bottom:none;}
 .table tr:hover td{background:var(--bg2);}
-.empty-state{text-align:center;padding:3rem;color:var(--text3);font-size:13px;}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;display:none;align-items:center;justify-content:center;}
+.empty-state{text-align:center;padding:3rem;color:var(--text3);font-size:12px;letter-spacing:0.02em;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--bg);border-radius:var(--radius-lg);padding:1.5rem;width:90%;max-width:600px;max-height:90vh;overflow-y:auto;}
-.modal-title{font-size:16px;font-weight:500;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;}
-.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:var(--bg);padding:10px 18px;border-radius:var(--radius);font-size:13px;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:999;}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-xl);padding:1.75rem;width:90%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-md);}
+.modal-title{font-size:15px;font-weight:600;margin-bottom:1.5rem;display:flex;justify-content:space-between;align-items:center;color:var(--text);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:var(--bg);padding:10px 18px;border-radius:var(--radius);font-size:12px;font-weight:500;opacity:0;transition:opacity 0.2s;pointer-events:none;z-index:999;box-shadow:var(--shadow-md);}
 .toast.show{opacity:1;}
 textarea{resize:vertical;}
-.search-bar{position:relative;margin-bottom:14px;}
-.search-bar input{padding-left:32px;}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;}
-.patient-row{display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);cursor:pointer;border-bottom:0.5px solid var(--border);}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:12px;}
+.search-wrap input{padding-left:34px;}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none;font-size:13px;}
+
+/* PATIENT */
+.patient-row{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:var(--radius);cursor:pointer;}
 .patient-row:hover{background:var(--bg2);}
-.patient-avatar{width:36px;height:36px;border-radius:50%;background:var(--gold-bg);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;flex-shrink:0;}
-.patient-name{font-size:13px;font-weight:500;}
+.patient-avatar{width:34px;height:34px;border-radius:50%;background:var(--rose-light);color:var(--rose);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;}
+.patient-name{font-size:13px;font-weight:500;color:var(--text);}
 .patient-sub{font-size:11px;color:var(--text3);margin-top:1px;}
-.tab-row{display:flex;gap:2px;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem;flex-wrap:wrap;}
-.tab-btn{padding:8px 14px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--text2);border-bottom:2px solid transparent;margin-bottom:-1px;font-family:inherit;}
-.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
+
+/* TABS */
+.tab-row{display:flex;border-bottom:1.5px solid var(--border2);margin-bottom:1.25rem;}
+.tab-btn{padding:9px 14px;font-size:12px;cursor:pointer;border:none;background:none;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-1.5px;font-family:inherit;font-weight:500;transition:all 0.15s;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--rose);border-bottom-color:var(--rose);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-.clinic-chip{padding:5px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:0.5px solid var(--border2);background:var(--bg);color:var(--text2);margin-right:6px;margin-bottom:6px;display:inline-block;}
-.bh-row{display:grid;grid-template-columns:2.3fr 60px 68px 95px 30px;gap:6px;padding-bottom:6px;font-size:11px;color:var(--text2);font-weight:500;border-bottom:0.5px solid var(--border);margin-bottom:8px;}
-.b-line{display:grid;grid-template-columns:2.3fr 60px 68px 95px 30px;gap:6px;align-items:center;margin-bottom:7px;}
-.lo{font-size:11px;color:var(--text3);text-decoration:line-through;}
-.lf{font-size:13px;font-weight:500;}
-.lf.disc{color:var(--success);}
-.totals-row{display:flex;justify-content:flex-end;gap:2rem;padding:10px 0 0;border-top:0.5px solid var(--border);margin-top:4px;}
-.evol-row{padding:10px 12px;border-left:3px solid var(--gold);background:var(--gold-bg);border-radius:0 var(--radius) var(--radius) 0;margin-bottom:8px;}
-.evol-date{font-size:11px;color:var(--text3);margin-bottom:3px;}
-.evol-clinic{font-size:11px;color:var(--gold);font-weight:500;margin-bottom:4px;}
-.abono-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px;}
+
+/* AGENDA */
+.agenda-legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);font-weight:500;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* EVOL */
+.evol-row{padding:12px 14px;border-left:3px solid var(--rose-mid);background:var(--rose-light);border-radius:0 var(--radius) var(--radius) 0;margin-bottom:8px;}
+.evol-date{font-size:10px;color:var(--text3);margin-bottom:2px;letter-spacing:0.04em;font-weight:500;}
+.evol-clinic{font-size:10px;color:var(--rose);font-weight:600;margin-bottom:4px;letter-spacing:0.03em;}
+
+/* ABONO */
+.abono-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
 .abono-row:last-child{border-bottom:none;}
-@media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform 0.2s;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.grid-2,.grid-3{grid-template-columns:1fr;}.bh-row,.b-line{grid-template-columns:1.6fr 50px 56px 82px 26px;gap:4px;}.page{padding:1rem;}}
+
+/* STAT CARD */
+.stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;text-align:center;box-shadow:var(--shadow);}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:6px;}
+.stat-value{font-size:18px;font-weight:700;color:var(--text);}
+
+/* BUDGET */
+.bh-row{display:grid;grid-template-columns:1.8fr 0.9fr 55px 65px 90px 26px;gap:6px;padding-bottom:8px;font-size:10px;color:var(--text3);font-weight:700;border-bottom:1.5px solid var(--border2);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;}
+.b-line{display:grid;grid-template-columns:1.8fr 0.9fr 55px 65px 90px 26px;gap:6px;align-items:center;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.b-line:last-child{border-bottom:none;}
+.b-line input{padding:6px 8px;text-align:center;font-size:12px;}
+.lo{font-size:10px;color:var(--text3);text-decoration:line-through;}
+.lf{font-size:13px;font-weight:600;color:var(--text);}
+.lf.disc{color:var(--sage);}
+.totals-row{display:flex;justify-content:flex-end;gap:2.5rem;padding:14px 0 0;border-top:1.5px solid var(--border2);margin-top:8px;}
+
+/* PROC PICKER */
+.proc-item{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--border);font-size:12px;transition:background 0.1s;}
+.proc-item:hover{background:var(--rose-light);}
+.proc-item:last-child{border-bottom:none;}
+
+@media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform 0.2s;}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.grid-2,.grid-3{grid-template-columns:1fr;}.bh-row,.b-line{grid-template-columns:1.4fr 0.7fr 46px 55px 78px 24px;gap:4px;}.page{padding:1rem;}}
 </style>
 </head>
 <body>
+
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
     <div class="name">Dra. Catalina Campos V.</div>
@@ -101,123 +164,137 @@ textarea{resize:vertical;}
   </nav>
   <div class="sync-status" id="sync-status">⟳ Conectando...</div>
 </aside>
+
 <main class="main">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:12px;">
       <button class="btn btn-sm" id="menu-btn" onclick="toggleSidebar()" style="display:none;">☰</button>
       <div class="topbar-title" id="topbar-title">Agenda</div>
     </div>
-    <button class="btn btn-gold btn-sm" id="topbar-action" onclick="topbarAction()">+ Nueva cita</button>
+    <button class="btn btn-rose btn-sm" id="topbar-action" onclick="topbarAction()">+ Nueva cita</button>
   </div>
+
+  <!-- AGENDA -->
   <div class="page active" id="page-agenda">
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="btn btn-sm" onclick="agendaNav(-1)">◀</button>
-          <span id="agenda-week-label" style="font-size:14px;font-weight:500;min-width:200px;text-align:center;"></span>
+          <span id="agenda-week-label" style="font-size:13px;font-weight:600;min-width:200px;text-align:center;color:var(--text);"></span>
           <button class="btn btn-sm" onclick="agendaNav(1)">▶</button>
           <button class="btn btn-sm" onclick="agendaGoToday()">Hoy</button>
         </div>
-        <button class="btn btn-sm" onclick="openBlockModal()">🚫 Bloquear horario</button>
+        <button class="btn btn-sm btn-danger" onclick="openBlockModal()">🚫 Bloquear horario</button>
       </div>
-      <div id="clinic-selector" style="margin-bottom:12px;"></div>
+      <div class="agenda-legend" id="agenda-legend"></div>
       <div id="agenda-grid"></div>
     </div>
   </div>
+
+  <!-- PACIENTES -->
   <div class="page" id="page-pacientes">
     <div style="display:flex;gap:1rem;align-items:start;">
-      <div style="width:300px;flex-shrink:0;">
+      <div style="width:270px;flex-shrink:0;">
         <div class="card" style="padding:0.75rem;">
-          <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="patient-search" placeholder="Buscar paciente..." oninput="filterPatients()"></div>
+          <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="patient-search" placeholder="Buscar paciente..." oninput="filterPatients()"></div>
           <div id="patient-list"></div>
         </div>
       </div>
-      <div style="flex:1;" id="patient-detail-panel"><div class="empty-state card">Selecciona un paciente</div></div>
+      <div style="flex:1;" id="patient-detail-panel">
+        <div class="empty-state card">Selecciona un paciente para ver su ficha</div>
+      </div>
     </div>
   </div>
+
+  <!-- NUEVO PRESUPUESTO -->
   <div class="page" id="page-nuevo-budget">
-    <div class="grid-2" style="align-items:start;">
-      <div>
-        <div class="card">
-          <div class="section-title">Paciente</div>
-          <div class="field"><label>Seleccionar paciente</label><select id="budget-patient-select" onchange="selectBudgetPatient()"><option value="">— Seleccionar —</option></select></div>
-          <div id="budget-patient-info" style="display:none;background:var(--gold-bg);border-radius:var(--radius);padding:10px 12px;font-size:13px;margin-top:8px;"></div>
-          <div class="field" style="margin-top:10px;"><label>Fecha</label><input type="date" id="budget-date"></div>
-          <div class="field"><label>Convenio</label><input type="text" id="budget-convenio" placeholder="Fonasa, Isapre..."></div>
+    <div style="max-width:820px;margin:0 auto;">
+      <div class="card">
+        <div class="card-title">Configuración del presupuesto</div>
+        <div class="grid-3">
+          <div class="field"><label>Paciente</label><select id="budget-patient-select" onchange="selectBudgetPatient()"><option value="">— Seleccionar —</option></select></div>
+          <div class="field"><label>Fecha</label><input type="date" id="budget-date"></div>
           <div class="field"><label>Validez</label><select id="budget-validez"><option value="15 días">15 días</option><option value="30 días" selected>30 días</option><option value="60 días">60 días</option></select></div>
         </div>
-        <div class="card">
-          <div class="section-title">Procedimientos</div>
-          <div id="budget-cat-chips" style="margin-bottom:10px;"></div>
-          <div class="search-bar"><span class="search-icon">🔍</span><input type="text" id="budget-proc-search" placeholder="Buscar..." oninput="filterBudgetProcs()"></div>
-          <div id="budget-proc-list" style="border:0.5px solid var(--border);border-radius:var(--radius);max-height:220px;overflow-y:auto;"></div>
+        <div class="grid-2">
+          <div class="field"><label>Convenio</label><input type="text" id="budget-convenio" placeholder="Fonasa, Isapre..."></div>
+          <div id="budget-patient-info" style="display:none;padding:10px 12px;background:var(--rose-light);border:1px solid var(--rose-mid);border-radius:var(--radius);font-size:12px;margin-top:22px;"></div>
         </div>
       </div>
-      <div>
-        <div class="card">
-          <div class="section-title">Detalle</div>
-          <div id="budget-lines-area"><div class="empty-state" style="padding:1.5rem;">Selecciona procedimientos</div></div>
-          <div id="budget-totals-area" style="display:none;"></div>
-        </div>
-        <div class="card">
-          <div class="field"><label>Observaciones</label><textarea id="budget-obs" rows="3"></textarea></div>
-          <div style="display:flex;gap:8px;margin-top:4px;">
-            <button class="btn btn-gold" style="flex:1;" onclick="saveBudget()">💾 Guardar</button>
-            <button class="btn btn-primary" onclick="previewBudget()">👁 Vista previa</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="budget-preview-section" style="display:none;">
+
       <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
-          <div class="section-title" style="margin:0;">Vista previa</div>
-          <button class="btn btn-gold btn-sm" onclick="downloadBudgetPDF()">⬇ Descargar PDF</button>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <div class="card-title" style="margin:0;">Prestaciones</div>
+          <button class="btn btn-rose btn-sm" onclick="toggleProcPicker()">+ Agregar prestación</button>
         </div>
-        <div id="budget-preview-content" style="border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;"></div>
+        <div id="proc-picker-panel" style="display:none;background:var(--bg2);border-radius:var(--radius);padding:14px;margin-bottom:16px;border:1.5px solid var(--border2);">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="budget-cat-chips"></div>
+          <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" id="budget-proc-search" placeholder="Buscar prestación..." oninput="filterBudgetProcs()"></div>
+          <div id="budget-proc-list" style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);"></div>
+        </div>
+        <div class="bh-row"><div>Prestación</div><div>Pieza dental</div><div style="text-align:center;">Cant.</div><div style="text-align:center;">Desc.%</div><div style="text-align:right;">Total</div><div></div></div>
+        <div id="budget-lines-area"><div class="empty-state" style="padding:1.5rem;">Agrega prestaciones con el botón de arriba</div></div>
+        <div id="budget-totals-area" style="display:none;"></div>
+      </div>
+
+      <div class="card">
+        <div class="field"><label>Observaciones</label><textarea id="budget-obs" rows="2" placeholder="Indicaciones, plan de tratamiento..."></textarea></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-rose" style="flex:1;" onclick="saveBudget()">💾 Guardar presupuesto</button>
+          <button class="btn btn-outline-rose" onclick="previewBudget()">👁 Vista previa</button>
+          <button class="btn btn-sm" onclick="clearBudget()">Limpiar</button>
+        </div>
+      </div>
+
+      <div id="budget-preview-section" style="display:none;">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+            <div class="card-title" style="margin:0;">Vista previa</div>
+            <button class="btn btn-rose btn-sm" onclick="downloadBudgetPDF()">⬇ Descargar PDF</button>
+          </div>
+          <div id="budget-preview-content" style="background:#fff;color:#222;border:1px solid var(--border);border-radius:var(--radius);padding:2rem;"></div>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- PRECIOS -->
   <div class="page" id="page-precios">
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-        <div class="section-title" style="margin:0;">Base de precios <span id="prices-count" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:12px;"></span></div>
-        <button class="btn btn-gold btn-sm" onclick="togglePriceForm()">+ Agregar</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div class="card-title" style="margin:0;">Base de precios <span id="prices-count" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3);"></span></div>
+        <button class="btn btn-rose btn-sm" onclick="togglePriceForm()">+ Agregar</button>
       </div>
-      <div id="price-new-form" style="display:none;background:var(--bg2);border-radius:var(--radius);padding:14px;margin-bottom:14px;border:0.5px solid var(--border);">
+      <div id="price-new-form" style="display:none;background:var(--bg2);border-radius:var(--radius);padding:14px;margin-bottom:16px;border:1px solid var(--border2);">
         <div class="grid-3">
-          <div class="field"><label>Procedimiento</label><input type="text" id="np-name"></div>
+          <div class="field"><label>Nombre</label><input type="text" id="np-name" placeholder="Nombre del procedimiento"></div>
           <div class="field"><label>Categoría</label><select id="np-cat"><option>Preventiva</option><option>Estética</option><option>Restauradora</option><option>Endodoncia</option><option>Periodoncia</option><option>Ortodoncia</option><option>Cirugía</option><option>Implantología</option><option>Prótesis</option><option>Radiografía</option><option>Otras</option></select></div>
           <div class="field"><label>Precio (CLP)</label><input type="number" id="np-price" min="0"></div>
         </div>
-        <div style="display:flex;gap:8px;"><button class="btn btn-gold btn-sm" onclick="saveNewPrice()">Guardar</button><button class="btn btn-sm" onclick="togglePriceForm()">Cancelar</button></div>
+        <div style="display:flex;gap:8px;"><button class="btn btn-rose btn-sm" onclick="saveNewPrice()">Guardar</button><button class="btn btn-sm" onclick="togglePriceForm()">Cancelar</button></div>
       </div>
       <table class="table"><thead><tr><th>Procedimiento</th><th>Categoría</th><th style="text-align:right;">Precio</th><th style="width:50px;"></th></tr></thead><tbody id="prices-tbody"></tbody></table>
     </div>
   </div>
+
+  <!-- PERFIL -->
   <div class="page" id="page-perfil">
-    <div class="card">
-      <div class="section-title">Datos profesionales</div>
-      <div class="grid-2">
-        <div class="field"><label>Nombre</label><input type="text" id="prof-name"></div>
-        <div class="field"><label>Especialidad</label><input type="text" id="prof-spec"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>RUT</label><input type="text" id="prof-rut"></div>
-        <div class="field"><label>Registro</label><input type="text" id="prof-reg"></div>
-      </div>
-      <div class="grid-2">
-        <div class="field"><label>Teléfono</label><input type="text" id="prof-phone"></div>
-        <div class="field"><label>Email</label><input type="email" id="prof-email"></div>
-      </div>
+    <div class="card" style="max-width:580px;">
+      <div class="card-title">Datos profesionales</div>
+      <div class="grid-2"><div class="field"><label>Nombre</label><input type="text" id="prof-name"></div><div class="field"><label>Especialidad</label><input type="text" id="prof-spec"></div></div>
+      <div class="grid-2"><div class="field"><label>RUT</label><input type="text" id="prof-rut"></div><div class="field"><label>Registro</label><input type="text" id="prof-reg"></div></div>
+      <div class="grid-2"><div class="field"><label>Teléfono</label><input type="text" id="prof-phone"></div><div class="field"><label>Email</label><input type="email" id="prof-email"></div></div>
       <div class="field"><label>Pie de presupuesto</label><textarea id="prof-footer" rows="2"></textarea></div>
-      <button class="btn btn-gold" onclick="saveProfile()">💾 Guardar perfil</button>
+      <button class="btn btn-rose" onclick="saveProfile()">💾 Guardar perfil</button>
     </div>
   </div>
 </main>
+
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-cita"><div class="modal"><div class="modal-title"><span id="modal-cita-title">Nueva cita</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-cita')">✕</button></div><div id="modal-cita-body"></div></div></div>
-<div class="modal-overlay" id="modal-paciente"><div class="modal" style="max-width:700px;"><div class="modal-title"><span id="modal-paciente-title">Nuevo paciente</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-paciente')">✕</button></div><div id="modal-paciente-body"></div></div></div>
+<div class="modal-overlay" id="modal-paciente"><div class="modal" style="max-width:660px;"><div class="modal-title"><span id="modal-paciente-title">Nuevo paciente</span><button class="btn btn-sm btn-danger" onclick="closeModal('modal-paciente')">✕</button></div><div id="modal-paciente-body"></div></div></div>
 <div class="toast" id="toast"></div>
+
 <script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,doc,setDoc,getDoc,collection,getDocs,addDoc,deleteDoc,updateDoc}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -226,7 +303,7 @@ const FC={apiKey:"AIzaSyDe609i7jiHBPkTcKR47FeSSDeDJGBwDyU",authDomain:"presupues
 const fbApp=initializeApp(FC);const db=getFirestore(fbApp);const storage=getStorage(fbApp);
 const CATS=["Preventiva","Estética","Restauradora","Endodoncia","Periodoncia","Ortodoncia","Cirugía","Implantología","Prótesis","Radiografía","Otras"];
 const CLINICS=["Boutique Dental Montemar","Mauco Salud","OdontoPlus","AltoCampus"];
-const CC=["#185fa5","#1a7a4a","#7a3a00","#6a1a7a"];
+const CC=["#c9767c","#6a8fbf","#7a9e87","#b8956a"];
 const DP=[
 {name:"Consulta diagnóstica",cat:"Preventiva",price:30000},{name:"Limpieza dental",cat:"Preventiva",price:45000},
 {name:"Fluorización",cat:"Preventiva",price:20000},{name:"Sellantes (por pieza)",cat:"Preventiva",price:20000},
@@ -245,12 +322,12 @@ const DP=[
 {name:"Prótesis removible acrílica",cat:"Prótesis",price:240000},{name:"Prótesis removible base metálica",cat:"Prótesis",price:305000},
 {name:"Radiografía periapical",cat:"Radiografía",price:12000},{name:"Radiografía panorámica",cat:"Radiografía",price:32000}
 ];
-let S={profile:{name:"Dra. Catalina Campos V.",spec:"Cirujana Dentista",rut:"19.817.843-8",reg:"",phone:"",email:"",footer:"Presupuesto referencial. Los precios pueden variar según complejidad del caso clínico."},priceList:[],patients:[],agendaEvents:[],budgetLines:[],budgetFilterCat:"all",budgetFilterText:"",nextBudgetLineId:1,selectedPatientId:null,agendaWeekOffset:0,agendaClinic:0,budgetCounter:1};
+let S={profile:{name:"Dra. Catalina Campos V.",spec:"Cirujana Dentista",rut:"19.817.843-8",reg:"",phone:"",email:"",footer:"Presupuesto referencial. Los precios pueden variar según complejidad del caso clínico."},priceList:[],patients:[],agendaEvents:[],budgetLines:[],budgetFilterCat:"all",budgetFilterText:"",nextBudgetLineId:1,selectedPatientId:null,agendaWeekOffset:0,budgetCounter:1,procPickerOpen:false};
 const setSS=m=>{const e=document.getElementById("sync-status");if(e)e.textContent=m;};
 const toast=m=>{const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2500);};
 const fmt=n=>"$"+Math.round(n).toLocaleString("es-CL");
 const fmtDate=d=>d?new Date(d+"T12:00:00").toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"}):"—";
-const initials=n=>n?n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase():"?";
+const initials=n=>n?n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase():"?";
 const closeModal=id=>document.getElementById(id).classList.remove("open");
 const openModal=id=>document.getElementById(id).classList.add("open");
 window.closeModal=closeModal;
@@ -264,12 +341,12 @@ async function loadAll(){
     if(prSnap.empty){for(const p of DP){const r=await addDoc(collection(db,"prices"),p);S.priceList.push({...p,id:r.id});}}
     else{prSnap.forEach(d=>S.priceList.push({...d.data(),id:d.id}));S.priceList.sort((a,b)=>CATS.indexOf(a.cat)-CATS.indexOf(b.cat));}
     const patSnap=await getDocs(collection(db,"patients"));
-    patSnap.forEach(d=>S.patients.push({...d.data(),id:d.id}));S.patients.sort((a,b)=>a.name.localeCompare(b.name));
+    const seenIds=new Set();patSnap.forEach(d=>{if(!seenIds.has(d.id)){seenIds.add(d.id);S.patients.push({...d.data(),id:d.id});}});
+    S.patients.sort((a,b)=>a.name.localeCompare(b.name));
     const agSnap=await getDocs(collection(db,"agenda"));agSnap.forEach(d=>S.agendaEvents.push({...d.data(),id:d.id}));
     setSS("☁ Sincronizado");
-    renderAgenda();renderClinicSelector();populateBudgetPatientSelect();renderBudgetCatChips();renderBudgetProcList();
-    loadProfileForm();
-  }catch(e){setSS("⚠ Sin conexión — recarga la página");console.error(e);}
+    renderAgenda();renderAgendaLegend();populateBudgetPatientSelect();renderBudgetCatChips();renderBudgetProcList();loadProfileForm();
+  }catch(e){setSS("⚠ Sin conexión");console.error(e);}
 }
 
 window.showPage=function(page){
@@ -277,26 +354,24 @@ window.showPage=function(page){
   document.querySelectorAll(".nav-item").forEach(n=>n.classList.remove("active"));
   document.getElementById("page-"+page).classList.add("active");
   const titles={agenda:"Agenda",pacientes:"Pacientes","nuevo-budget":"Nuevo presupuesto",precios:"Mis precios",perfil:"Mi perfil"};
-  const acts={agenda:"+ Nueva cita",pacientes:"+ Nuevo paciente","nuevo-budget":"Limpiar",precios:"",perfil:""};
+  const acts={agenda:"+ Nueva cita",pacientes:"+ Nuevo paciente","nuevo-budget":"","precios":"","perfil":""};
   document.getElementById("topbar-title").textContent=titles[page]||"";
   const btn=document.getElementById("topbar-action");btn.textContent=acts[page]||"";btn.style.display=acts[page]?"block":"none";
   const pages=["agenda","pacientes","nuevo-budget","precios","perfil"];
   document.querySelectorAll(".nav-item").forEach((n,i)=>n.classList.toggle("active",pages[i]===page));
-  if(page==="precios")renderPricesTable();
-  if(page==="perfil")loadProfileForm();
+  if(page==="precios")renderPricesTable();if(page==="perfil")loadProfileForm();
   if(page==="pacientes")renderPatientList();
   if(page==="nuevo-budget"){renderBudgetCatChips();renderBudgetProcList();populateBudgetPatientSelect();}
   if(page==="agenda")renderAgenda();
   document.getElementById("sidebar").classList.remove("open");
 };
-window.topbarAction=function(){const a=document.querySelector(".page.active").id;if(a==="page-agenda")openCitaModal();if(a==="page-pacientes")openNewPatientModal();if(a==="page-nuevo-budget")clearBudget();};
+window.topbarAction=function(){const a=document.querySelector(".page.active").id;if(a==="page-agenda")openCitaModal();if(a==="page-pacientes")openNewPatientModal();};
 window.toggleSidebar=function(){document.getElementById("sidebar").classList.toggle("open");};
 
 // AGENDA
 const dStr=d=>d.toISOString().split("T")[0];
 function getWeekDays(offset){const now=new Date();const day=now.getDay();const mon=new Date(now);mon.setDate(now.getDate()-(day===0?6:day-1)+offset*7);return Array.from({length:5},(_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d;});}
-function renderClinicSelector(){const el=document.getElementById("clinic-selector");if(!el)return;el.innerHTML=CLINICS.map((c,i)=>`<span class="clinic-chip" style="${S.agendaClinic===i?"background:"+CC[i]+";color:#fff;border-color:"+CC[i]+";":""}" onclick="selectClinic(${i})">${c}</span>`).join("");}
-window.selectClinic=function(i){S.agendaClinic=i;renderClinicSelector();renderAgenda();};
+function renderAgendaLegend(){const el=document.getElementById("agenda-legend");if(!el)return;el.innerHTML=CLINICS.map((c,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${CC[i]};"></div><span>${c}</span></div>`).join("")+`<div class="legend-item"><div class="legend-dot" style="background:#ccc;"></div><span>Bloqueado</span></div>`;}
 window.agendaNav=function(d){S.agendaWeekOffset+=d;renderAgenda();};
 window.agendaGoToday=function(){S.agendaWeekOffset=0;renderAgenda();};
 function renderAgenda(){
@@ -304,103 +379,141 @@ function renderAgenda(){
   const HOURS=[];for(let h=9;h<=20;h++){HOURS.push(h+":00");if(h<20)HOURS.push(h+":30");}
   const lbl=`${days[0].toLocaleDateString("es-CL",{day:"2-digit",month:"short"})} — ${days[4].toLocaleDateString("es-CL",{day:"2-digit",month:"short",year:"numeric"})}`;
   const wl=document.getElementById("agenda-week-label");if(wl)wl.textContent=lbl;
-  const clinic=CLINICS[S.agendaClinic];const clEv=S.agendaEvents.filter(e=>e.clinic===clinic);const today=dStr(new Date());
-  let hH=`<div style="font-size:11px;color:var(--text3);padding:8px;background:var(--bg2);"></div>`;
-  days.forEach(d=>{const isT=dStr(d)===today;hH+=`<div style="background:var(--bg2);padding:8px;text-align:center;border-left:0.5px solid var(--border);"><div style="font-size:11px;color:var(--text3);">${["Lun","Mar","Mié","Jue","Vie"][d.getDay()-1]||""}</div><div style="font-size:14px;font-weight:${isT?700:400};color:${isT?"var(--gold)":"var(--text)"};">${d.getDate()}</div></div>`;});
+  const today=dStr(new Date());
+  let hH=`<div style="background:var(--bg3);border-bottom:1px solid var(--border2);min-height:52px;"></div>`;
+  days.forEach(d=>{const isT=dStr(d)===today;hH+=`<div style="background:${isT?"var(--rose-light)":"var(--bg2)"};padding:8px 4px;text-align:center;border-left:1px solid var(--border2);border-bottom:1px solid var(--border2);"><div style="font-size:9px;color:${isT?"var(--rose)":"var(--text3)"};letter-spacing:0.08em;font-weight:700;text-transform:uppercase;">${["LUN","MAR","MIÉ","JUE","VIE"][d.getDay()-1]||""}</div><div style="font-size:16px;font-weight:${isT?700:400};color:${isT?"var(--rose)":"var(--text)"};margin-top:2px;">${d.getDate()}</div></div>`;});
   let bH="";
   HOURS.forEach((time,ti)=>{
-    bH+=`<div style="background:var(--bg2);padding:4px 6px;font-size:11px;color:var(--text3);text-align:right;border-top:${ti%2===0?"0.5px solid var(--border)":"none"};display:flex;align-items:flex-start;justify-content:flex-end;padding-top:6px;">${ti%2===0?time:""}</div>`;
+    bH+=`<div style="background:var(--bg2);padding:2px 6px;font-size:10px;color:var(--text3);text-align:right;border-top:${ti%2===0?"1px solid var(--border2)":"none"};display:flex;align-items:flex-start;justify-content:flex-end;padding-top:5px;min-height:28px;font-weight:500;">${ti%2===0?time:""}</div>`;
     days.forEach(d=>{
-      const ds=dStr(d);const slEv=clEv.filter(e=>e.date===ds&&e.time===time);
-      let evH=slEv.map(ev=>`<div onclick="viewEvent('${ev.id}')" style="position:absolute;inset:1px;border-radius:4px;padding:3px 6px;font-size:11px;font-weight:500;overflow:hidden;cursor:pointer;background:${ev.type==="bloqueo"?"var(--bg3)":"var(--info-bg)"};color:${ev.type==="bloqueo"?"var(--text3)":"var(--info)"};border-left:3px solid ${ev.type==="bloqueo"?"var(--text3)":"var(--info)"};height:${ev.duration===60?"58px":"28px"};z-index:2;">${ev.type==="bloqueo"?"🚫 "+ev.label:(ev.patientName||"Cita")}</div>`).join("");
-      bH+=`<div style="position:relative;min-height:30px;background:var(--bg);border-left:0.5px solid var(--border);border-top:${ti%2===0?"0.5px solid var(--border)":"none"};cursor:pointer;" onclick="openSlotModal('${ds}','${time}')">${evH}</div>`;
+      const ds=dStr(d);const slEv=S.agendaEvents.filter(e=>e.date===ds&&e.time===time);
+      let evH=slEv.map(ev=>{const ci=CLINICS.indexOf(ev.clinic);const clr=ev.type==="bloqueo"?"#bbb":(ci>=0?CC[ci]:"#999");return`<div onclick="viewEvent('${ev.id}')" style="position:absolute;inset:1px;border-radius:4px;padding:3px 6px;font-size:10px;font-weight:600;overflow:hidden;cursor:pointer;background:${clr}18;color:${clr};border-left:3px solid ${clr};height:${ev.duration===60?"54px":"26px"};z-index:2;line-height:1.4;">${ev.type==="bloqueo"?"🚫 "+(ev.label||""):(ev.patientName||"Cita")}<div style="font-size:9px;opacity:0.8;margin-top:1px;">${ev.clinic||""}</div></div>`;}).join("");
+      bH+=`<div style="position:relative;min-height:28px;background:var(--bg);border-left:1px solid var(--border2);border-top:${ti%2===0?"1px solid var(--border2)":"none"};cursor:pointer;transition:background 0.1s;" onclick="openSlotModal('${ds}','${time}')" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background='var(--bg)'">${evH}</div>`;
     });
   });
-  const ag=document.getElementById("agenda-grid");if(ag)ag.innerHTML=`<div style="display:grid;grid-template-columns:60px repeat(5,1fr);background:var(--border);border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border2);">${hH}${bH}</div>`;
+  const ag=document.getElementById("agenda-grid");
+  if(ag)ag.innerHTML=`<div style="display:grid;grid-template-columns:52px repeat(5,1fr);border-radius:var(--radius-lg);overflow:hidden;border:1.5px solid var(--border2);">${hH}${bH}</div>`;
 }
 window.openSlotModal=function(date,time){
   document.getElementById("modal-cita-title").textContent="Nueva cita";
-  document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Tipo</label><select id="cita-type" onchange="toggleCitaType()"><option value="cita">Cita con paciente</option><option value="bloqueo">Bloquear horario</option></select></div><div id="cita-patient-field" class="field"><label>Paciente</label><select id="cita-patient">${S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}</select></div><div id="bloqueo-label-field" class="field" style="display:none;"><label>Motivo</label><input type="text" id="cita-bloqueo-label" placeholder="Almuerzo, Reunión..."></div><div class="grid-2"><div class="field"><label>Fecha</label><input type="date" id="cita-date" value="${date}"></div><div class="field"><label>Hora</label><input type="time" id="cita-time" value="${time}"></div></div><div class="field"><label>Duración</label><select id="cita-duration"><option value="30">30 minutos</option><option value="60">60 minutos</option></select></div><div class="field"><label>Clínica</label><select id="cita-clinic">${CLINICS.map((c,i)=>`<option value="${c}"${i===S.agendaClinic?" selected":""}>${c}</option>`).join("")}</select></div><div class="field"><label>Notas</label><textarea id="cita-notes" rows="2"></textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveCita()">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;
+  document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Tipo</label><select id="cita-type" onchange="toggleCitaType()"><option value="cita">Cita con paciente</option><option value="bloqueo">Bloquear horario</option></select></div><div id="cita-patient-field" class="field"><label>Paciente</label><select id="cita-patient">${S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("")}</select></div><div id="bloqueo-label-field" class="field" style="display:none;"><label>Motivo del bloqueo</label><input type="text" id="cita-bloqueo-label" placeholder="Almuerzo, Reunión..."></div><div class="grid-2"><div class="field"><label>Fecha</label><input type="date" id="cita-date" value="${date}"></div><div class="field"><label>Hora</label><input type="time" id="cita-time" value="${time}"></div></div><div class="field"><label>Duración</label><select id="cita-duration"><option value="30">30 minutos</option><option value="60">60 minutos</option></select></div><div class="field"><label>Clínica</label><select id="cita-clinic">${CLINICS.map(c=>`<option value="${c}">${c}</option>`).join("")}</select></div><div class="field"><label>Notas</label><textarea id="cita-notes" rows="2" placeholder="Motivo de consulta..."></textarea></div><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-rose" style="flex:1;" onclick="saveCita()">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;
   openModal("modal-cita");
 };
 window.openCitaModal=function(){openSlotModal(dStr(new Date()),"09:00");};
 window.openBlockModal=function(){openSlotModal(dStr(new Date()),"09:00");setTimeout(()=>{const s=document.getElementById("cita-type");if(s){s.value="bloqueo";toggleCitaType();}},50);};
 window.toggleCitaType=function(){const t=document.getElementById("cita-type").value;document.getElementById("cita-patient-field").style.display=t==="cita"?"block":"none";document.getElementById("bloqueo-label-field").style.display=t==="bloqueo"?"block":"none";};
-window.saveCita=async function(){const type=document.getElementById("cita-type").value;const data={type,date:document.getElementById("cita-date").value,time:document.getElementById("cita-time").value,duration:parseInt(document.getElementById("cita-duration").value),clinic:document.getElementById("cita-clinic").value,notes:document.getElementById("cita-notes").value,createdAt:new Date().toISOString()};if(type==="cita"){const pid=document.getElementById("cita-patient").value;const pat=S.patients.find(p=>p.id===pid);data.patientId=pid;data.patientName=pat?pat.name:"";}else{data.label=document.getElementById("cita-bloqueo-label").value||"Bloqueado";}try{const r=await addDoc(collection(db,"agenda"),data);S.agendaEvents.push({...data,id:r.id});closeModal("modal-cita");renderAgenda();toast("✓ Guardado");}catch(e){toast("⚠ Error");}};
-window.viewEvent=function(id){const ev=S.agendaEvents.find(e=>e.id===id);if(!ev)return;document.getElementById("modal-cita-title").textContent=ev.type==="bloqueo"?"Horario bloqueado":"Cita";document.getElementById("modal-cita-body").innerHTML=`<div style="font-size:13px;line-height:1.8;">${ev.type==="bloqueo"?`<div><b>Motivo:</b> ${ev.label}</div>`:`<div><b>Paciente:</b> ${ev.patientName}</div>`}<div><b>Fecha:</b> ${fmtDate(ev.date)}</div><div><b>Hora:</b> ${ev.time} — ${ev.duration} min</div><div><b>Clínica:</b> ${ev.clinic}</div>${ev.notes?`<div><b>Notas:</b> ${ev.notes}</div>`:""}</div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn btn-danger" onclick="deleteEvent('${id}')">🗑 Eliminar</button><button class="btn" onclick="closeModal('modal-cita')">Cerrar</button></div>`;openModal("modal-cita");};
-window.deleteEvent=async function(id){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"agenda",id));S.agendaEvents=S.agendaEvents.filter(e=>e.id!==id);closeModal("modal-cita");renderAgenda();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
+window.saveCita=async function(){const type=document.getElementById("cita-type").value;const data={type,date:document.getElementById("cita-date").value,time:document.getElementById("cita-time").value,duration:parseInt(document.getElementById("cita-duration").value),clinic:document.getElementById("cita-clinic").value,notes:document.getElementById("cita-notes").value,createdAt:new Date().toISOString()};if(type==="cita"){const pid=document.getElementById("cita-patient").value;const pat=S.patients.find(p=>p.id===pid);data.patientId=pid;data.patientName=pat?pat.name:"";}else{data.label=document.getElementById("cita-bloqueo-label").value||"Bloqueado";}try{const r=await addDoc(collection(db,"agenda"),data);S.agendaEvents.push({...data,id:r.id});closeModal("modal-cita");renderAgenda();toast("✓ Cita guardada");}catch(e){toast("⚠ Error al guardar");}};
+window.viewEvent=function(id){const ev=S.agendaEvents.find(e=>e.id===id);if(!ev)return;const ci=CLINICS.indexOf(ev.clinic);const clr=ev.type==="bloqueo"?"#999":(ci>=0?CC[ci]:"#888");document.getElementById("modal-cita-title").textContent=ev.type==="bloqueo"?"Horario bloqueado":"Detalle de cita";document.getElementById("modal-cita-body").innerHTML=`<div style="font-size:13px;line-height:2.2;color:var(--text);">${ev.type==="bloqueo"?`<div><b>Motivo:</b> ${ev.label}</div>`:`<div><b>Paciente:</b> ${ev.patientName}</div>`}<div><b>Fecha:</b> ${fmtDate(ev.date)}</div><div><b>Hora:</b> ${ev.time} — ${ev.duration} min</div><div><b>Clínica:</b> <span style="color:${clr};font-weight:600;">${ev.clinic}</span></div>${ev.notes?`<div><b>Notas:</b> ${ev.notes}</div>`:""}</div><div style="display:flex;gap:8px;margin-top:16px;"><button class="btn btn-danger btn-sm" onclick="deleteEvent('${id}')">🗑 Eliminar</button><button class="btn btn-sm" onclick="closeModal('modal-cita')">Cerrar</button></div>`;openModal("modal-cita");};
+window.deleteEvent=async function(id){if(!confirm("¿Eliminar este evento?"))return;try{await deleteDoc(doc(db,"agenda",id));S.agendaEvents=S.agendaEvents.filter(e=>e.id!==id);closeModal("modal-cita");renderAgenda();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
 
 // PATIENTS
 window.filterPatients=function(){renderPatientList();};
-function renderPatientList(){const q=document.getElementById("patient-search")?.value?.toLowerCase()||"";const filtered=S.patients.filter(p=>p.name.toLowerCase().includes(q)||(p.rut||"").includes(q));const el=document.getElementById("patient-list");if(!el)return;if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:2rem;">Sin resultados</div>`;return;}el.innerHTML=filtered.map(p=>`<div class="patient-row" onclick="openPatient('${p.id}')"><div class="patient-avatar">${initials(p.name)}</div><div><div class="patient-name">${p.name}</div><div class="patient-sub">${p.rut||""} ${p.phone?"· "+p.phone:""}</div></div></div>`).join("");}
+function renderPatientList(){
+  const q=(document.getElementById("patient-search")?.value||"").toLowerCase();
+  const seen=new Set();
+  const filtered=S.patients.filter(p=>{if(seen.has(p.id))return false;seen.add(p.id);return p.name.toLowerCase().includes(q)||(p.rut||"").includes(q);});
+  const el=document.getElementById("patient-list");if(!el)return;
+  if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:1.5rem;">Sin resultados</div>`;return;}
+  el.innerHTML=filtered.map(p=>`<div class="patient-row" onclick="openPatient('${p.id}')"><div class="patient-avatar">${initials(p.name)}</div><div><div class="patient-name">${p.name}</div><div class="patient-sub">${p.rut||""} ${p.phone?"· "+p.phone:""}</div></div></div>`).join("");
+}
 window.openNewPatientModal=function(){document.getElementById("modal-paciente-title").textContent="Nuevo paciente";document.getElementById("modal-paciente-body").innerHTML=patientFormHTML(null);openModal("modal-paciente");};
-function patientFormHTML(pat){return`<div class="grid-2"><div class="field"><label>Nombre completo *</label><input type="text" id="pf-name" value="${pat?.name||""}"></div><div class="field"><label>RUT</label><input type="text" id="pf-rut" value="${pat?.rut||""}"></div></div><div class="grid-2"><div class="field"><label>Fecha de nacimiento</label><input type="date" id="pf-dob" value="${pat?.dob||""}"></div><div class="field"><label>Sexo</label><select id="pf-sex"><option value="">—</option><option${pat?.sex==="F"?" selected":""}>F</option><option${pat?.sex==="M"?" selected":""}>M</option></select></div></div><div class="grid-2"><div class="field"><label>Teléfono</label><input type="text" id="pf-phone" value="${pat?.phone||""}"></div><div class="field"><label>Email</label><input type="email" id="pf-email" value="${pat?.email||""}"></div></div><div class="field"><label>Dirección</label><input type="text" id="pf-address" value="${pat?.address||""}"></div><div class="field"><label>Convenio</label><input type="text" id="pf-convenio" value="${pat?.convenio||""}"></div><div class="field"><label>Antecedentes médicos</label><textarea id="pf-medical" rows="3">${pat?.medical||""}</textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="savePatient(${pat?`'${pat.id}'`:"null"})">💾 Guardar</button><button class="btn" onclick="closeModal('modal-paciente')">Cancelar</button></div>`;}
-window.savePatient=async function(id){const name=document.getElementById("pf-name").value.trim();if(!name){alert("El nombre es obligatorio");return;}const data={name,rut:document.getElementById("pf-rut").value,dob:document.getElementById("pf-dob").value,sex:document.getElementById("pf-sex").value,phone:document.getElementById("pf-phone").value,email:document.getElementById("pf-email").value,address:document.getElementById("pf-address").value,convenio:document.getElementById("pf-convenio").value,medical:document.getElementById("pf-medical").value,updatedAt:new Date().toISOString()};try{if(id){await updateDoc(doc(db,"patients",id),data);const idx=S.patients.findIndex(p=>p.id===id);if(idx>=0)S.patients[idx]={...S.patients[idx],...data};}else{data.createdAt=new Date().toISOString();const r=await addDoc(collection(db,"patients"),data);S.patients.push({...data,id:r.id});S.patients.sort((a,b)=>a.name.localeCompare(b.name));}closeModal("modal-paciente");renderPatientList();populateBudgetPatientSelect();if(S.selectedPatientId)openPatient(S.selectedPatientId);toast("✓ Guardado");}catch(e){toast("⚠ Error");console.error(e);}};
+function patientFormHTML(pat){return`<div class="grid-2"><div class="field"><label>Nombre completo *</label><input type="text" id="pf-name" value="${pat?.name||""}" placeholder="Nombre Apellido"></div><div class="field"><label>RUT</label><input type="text" id="pf-rut" value="${pat?.rut||""}" placeholder="12.345.678-9"></div></div><div class="grid-2"><div class="field"><label>Fecha de nacimiento</label><input type="date" id="pf-dob" value="${pat?.dob||""}"></div><div class="field"><label>Sexo</label><select id="pf-sex"><option value="">—</option><option${pat?.sex==="F"?" selected":""} value="F">Femenino</option><option${pat?.sex==="M"?" selected":""} value="M">Masculino</option></select></div></div><div class="grid-2"><div class="field"><label>Teléfono</label><input type="text" id="pf-phone" value="${pat?.phone||""}" placeholder="+56 9 ..."></div><div class="field"><label>Email</label><input type="email" id="pf-email" value="${pat?.email||""}"></div></div><div class="field"><label>Dirección</label><input type="text" id="pf-address" value="${pat?.address||""}"></div><div class="field"><label>Convenio</label><input type="text" id="pf-convenio" value="${pat?.convenio||""}" placeholder="Fonasa, Isapre..."></div><div class="field"><label>Antecedentes médicos</label><textarea id="pf-medical" rows="3" placeholder="Alergias, medicamentos, enfermedades sistémicas...">${pat?.medical||""}</textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-rose" style="flex:1;" onclick="savePatient(${pat?`'${pat.id}'`:"null"})">💾 Guardar</button><button class="btn" onclick="closeModal('modal-paciente')">Cancelar</button></div>`;}
+window.savePatient=async function(id){const name=document.getElementById("pf-name").value.trim();if(!name){alert("El nombre es obligatorio");return;}const data={name,rut:document.getElementById("pf-rut").value,dob:document.getElementById("pf-dob").value,sex:document.getElementById("pf-sex").value,phone:document.getElementById("pf-phone").value,email:document.getElementById("pf-email").value,address:document.getElementById("pf-address").value,convenio:document.getElementById("pf-convenio").value,medical:document.getElementById("pf-medical").value,updatedAt:new Date().toISOString()};try{if(id){await updateDoc(doc(db,"patients",id),data);const idx=S.patients.findIndex(p=>p.id===id);if(idx>=0)S.patients[idx]={...S.patients[idx],...data};}else{data.createdAt=new Date().toISOString();const r=await addDoc(collection(db,"patients"),data);if(!S.patients.find(p=>p.id===r.id))S.patients.push({...data,id:r.id});S.patients.sort((a,b)=>a.name.localeCompare(b.name));}closeModal("modal-paciente");renderPatientList();populateBudgetPatientSelect();if(S.selectedPatientId)openPatient(S.selectedPatientId);toast("✓ Paciente guardado");}catch(e){toast("⚠ Error");console.error(e);}};
 window.editPatient=function(id){const pat=S.patients.find(p=>p.id===id);if(!pat)return;document.getElementById("modal-paciente-title").textContent="Editar paciente";document.getElementById("modal-paciente-body").innerHTML=patientFormHTML(pat);openModal("modal-paciente");};
 window.openPatient=async function(id){
   S.selectedPatientId=id;const pat=S.patients.find(p=>p.id===id);if(!pat)return;
   let budgets=[],evolutions=[],abonos=[],xrays=[];
   try{const bs=await getDocs(collection(db,"patients",id,"budgets"));bs.forEach(d=>budgets.push({...d.data(),id:d.id}));budgets.sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||""));const es=await getDocs(collection(db,"patients",id,"evolutions"));es.forEach(d=>evolutions.push({...d.data(),id:d.id}));evolutions.sort((a,b)=>(b.date||"").localeCompare(a.date||""));const abs=await getDocs(collection(db,"patients",id,"abonos"));abs.forEach(d=>abonos.push({...d.data(),id:d.id}));abonos.sort((a,b)=>(b.date||"").localeCompare(a.date||""));const xs=await getDocs(collection(db,"patients",id,"xrays"));xs.forEach(d=>xrays.push({...d.data(),id:d.id}));}catch(e){console.error(e);}
   const totalAb=abonos.reduce((s,a)=>s+(a.amount||0),0);const totalPr=budgets.reduce((s,b)=>s+(b.total||0),0);const saldo=totalPr-totalAb;
-  const panel=document.getElementById("patient-detail-panel");
-  panel.innerHTML=`<div class="card" style="margin-bottom:0.5rem;"><div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;"><div style="display:flex;align-items:center;gap:12px;"><div class="patient-avatar" style="width:48px;height:48px;font-size:18px;">${initials(pat.name)}</div><div><div style="font-size:17px;font-weight:600;">${pat.name}</div><div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.email].filter(Boolean).join(" · ")}</div>${pat.convenio?`<span class="badge badge-gold" style="margin-top:4px;">${pat.convenio}</span>`:""}</div></div><div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn btn-sm" onclick="editPatient('${id}')">✏️ Editar</button><button class="btn btn-gold btn-sm" onclick="newBudgetForPatient('${id}')">📄 Nuevo presupuesto</button></div></div></div>
+  document.getElementById("patient-detail-panel").innerHTML=`
+  <div class="card" style="margin-bottom:0.75rem;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div class="patient-avatar" style="width:46px;height:46px;font-size:16px;">${initials(pat.name)}</div>
+        <div><div style="font-size:17px;font-weight:700;color:var(--text);">${pat.name}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:3px;">${[pat.rut,pat.phone,pat.email].filter(Boolean).join(" · ")}</div>
+        ${pat.convenio?`<span class="badge badge-rose" style="margin-top:5px;">${pat.convenio}</span>`:""}</div>
+      </div>
+      <div style="display:flex;gap:6px;"><button class="btn btn-sm" onclick="editPatient('${id}')">✏️ Editar</button><button class="btn btn-rose btn-sm" onclick="newBudgetForPatient('${id}')">📄 Presupuesto</button></div>
+    </div>
+  </div>
   <div class="tab-row"><button class="tab-btn active" onclick="switchPTab('info')">Ficha</button><button class="tab-btn" onclick="switchPTab('budgets')">Presupuestos</button><button class="tab-btn" onclick="switchPTab('evolutions')">Evoluciones</button><button class="tab-btn" onclick="switchPTab('abonos')">Abonos</button><button class="tab-btn" onclick="switchPTab('xrays')">Radiografías</button></div>
-  <div class="tab-panel active" id="pt-info"><div class="card"><div class="section-title">Datos personales</div><div class="grid-2">${[["Nombre",pat.name],["RUT",pat.rut],["Nacimiento",pat.dob?fmtDate(pat.dob):"—"],["Sexo",pat.sex||"—"],["Teléfono",pat.phone||"—"],["Email",pat.email||"—"],["Dirección",pat.address||"—"],["Convenio",pat.convenio||"—"]].map(([l,v])=>`<div style="margin-bottom:10px;"><div style="font-size:11px;color:var(--text3);">${l}</div><div style="font-size:13px;">${v||"—"}</div></div>`).join("")}</div>${pat.medical?`<div style="margin-top:8px;"><div style="font-size:11px;color:var(--text3);margin-bottom:4px;">ANTECEDENTES MÉDICOS</div><div style="background:var(--warn-bg);border-left:3px solid var(--gold);padding:10px 12px;border-radius:0 var(--radius) var(--radius) 0;font-size:13px;">${pat.medical}</div></div>`:""}</div></div>
-  <div class="tab-panel" id="pt-budgets"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;"><div class="section-title" style="margin:0;">Presupuestos</div><span style="font-size:12px;">Total: <b>${fmt(totalPr)}</b> | Abonado: <b style="color:var(--success);">${fmt(totalAb)}</b> | Saldo: <b style="color:${saldo>0?"var(--danger)":"var(--success)"};">${fmt(saldo)}</b></span></div>${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Procedimientos</th><th></th></tr></thead><tbody>${budgets.map(b=>`<tr><td><span class="badge badge-gold">Nº ${b.number||"—"}</span></td><td>${fmtDate(b.date)}</td><td style="font-weight:500;">${fmt(b.total||0)}</td><td style="font-size:12px;color:var(--text2);">${(b.lines||[]).map(l=>l.name).join(", ").substring(0,50)}</td><td><button class="btn btn-sm btn-gold" onclick="downloadSavedPDF(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">PDF</button></td></tr>`).join("")}</tbody></table>`:"<div class='empty-state'>Sin presupuestos</div>"}</div></div>
-  <div class="tab-panel" id="pt-evolutions"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Evoluciones</div><button class="btn btn-gold btn-sm" onclick="openEvolutionModal('${id}')">+ Agregar</button></div>${evolutions.length?evolutions.map(e=>`<div class="evol-row"><div style="display:flex;justify-content:space-between;"><div><div class="evol-date">${fmtDate(e.date)}</div><div class="evol-clinic">${e.clinic||""}</div>${e.treatment?`<div style="font-size:11px;color:var(--text2);">Tratamiento: <b>${e.treatment}</b></div>`:""}<div style="font-size:13px;margin-top:4px;">${e.text}</div></div><button class="btn btn-sm btn-danger" onclick="deleteEvolution('${id}','${e.id}')">✕</button></div></div>`).join(""):"<div class='empty-state'>Sin evoluciones</div>"}</div></div>
-  <div class="tab-panel" id="pt-abonos"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Abonos</div><button class="btn btn-gold btn-sm" onclick="openAbonoModal('${id}')">+ Agregar</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;"><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Presupuestado</div><div style="font-size:17px;font-weight:600;">${fmt(totalPr)}</div></div><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Abonado</div><div style="font-size:17px;font-weight:600;color:var(--success);">${fmt(totalAb)}</div></div><div class="card" style="text-align:center;margin:0;padding:12px;"><div style="font-size:11px;color:var(--text2);">Saldo</div><div style="font-size:17px;font-weight:600;color:${saldo>0?"var(--danger)":"var(--success)"};">${fmt(saldo)}</div></div></div>${abonos.length?abonos.map(a=>`<div class="abono-row"><div><div style="font-size:13px;font-weight:500;">${fmt(a.amount)}</div><div style="font-size:11px;color:var(--text3);">${fmtDate(a.date)}${a.method?" · "+a.method:""}</div>${a.note?`<div style="font-size:12px;color:var(--text2);">${a.note}</div>`:""}</div><button class="btn btn-sm btn-danger" onclick="deleteAbono('${id}','${a.id}')">✕</button></div>`).join(""):"<div class='empty-state'>Sin abonos</div>"}</div></div>
-  <div class="tab-panel" id="pt-xrays"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div class="section-title" style="margin:0;">Radiografías</div><label class="btn btn-gold btn-sm" style="cursor:pointer;">+ Subir<input type="file" accept="image/*" style="display:none;" onchange="uploadXray(event,'${id}')"></label></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">${xrays.length?xrays.map(x=>`<div style="position:relative;border-radius:var(--radius);overflow:hidden;border:0.5px solid var(--border);"><img src="${x.url}" style="width:100%;height:120px;object-fit:cover;cursor:pointer;" onclick="window.open('${x.url}')"><div style="padding:4px 6px;font-size:11px;color:var(--text2);">${fmtDate(x.date)}</div><button class="btn btn-danger btn-sm" style="position:absolute;top:4px;right:4px;padding:2px 6px;" onclick="deleteXray('${id}','${x.id}')">✕</button></div>`).join(""):"<div class='empty-state' style='grid-column:1/-1;'>Sin radiografías</div>"}</div></div></div>`;
+  <div class="tab-panel active" id="pt-info"><div class="card"><div class="card-title">Datos personales</div><div class="grid-2">${[["Nombre",pat.name],["RUT",pat.rut||"—"],["Nacimiento",pat.dob?fmtDate(pat.dob):"—"],["Sexo",pat.sex||"—"],["Teléfono",pat.phone||"—"],["Email",pat.email||"—"],["Dirección",pat.address||"—"],["Convenio",pat.convenio||"—"]].map(([l,v])=>`<div style="margin-bottom:12px;"><div style="font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:3px;">${l}</div><div style="font-size:13px;color:var(--text);">${v}</div></div>`).join("")}</div>${pat.medical?`<div style="margin-top:4px;"><div style="font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:6px;">Antecedentes médicos</div><div style="background:var(--rose-light);border-left:3px solid var(--rose-mid);padding:12px 14px;border-radius:0 var(--radius) var(--radius) 0;font-size:13px;color:var(--text);line-height:1.6;">${pat.medical}</div></div>`:""}</div></div>
+  <div class="tab-panel" id="pt-budgets"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;"><div class="card-title" style="margin:0;">Presupuestos</div><span style="font-size:11px;color:var(--text3);">Total: <b style="color:var(--text);">${fmt(totalPr)}</b> · Abonado: <b style="color:var(--sage);">${fmt(totalAb)}</b> · Saldo: <b style="color:${saldo>0?"var(--danger)":"var(--sage)"};">${fmt(saldo)}</b></span></div>${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Prestaciones</th><th></th></tr></thead><tbody>${budgets.map(b=>`<tr><td><span class="badge badge-rose">Nº ${b.number||"—"}</span></td><td style="color:var(--text2);">${fmtDate(b.date)}</td><td style="font-weight:600;">${fmt(b.total||0)}</td><td style="font-size:11px;color:var(--text3);">${(b.lines||[]).map(l=>l.name).join(", ").substring(0,55)}</td><td><button class="btn btn-sm btn-outline-rose" onclick="downloadSavedPDF(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">PDF</button></td></tr>`).join("")}</tbody></table>`:"<div class='empty-state'>Sin presupuestos aún</div>"}</div></div>
+  <div class="tab-panel" id="pt-evolutions"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Evoluciones clínicas</div><button class="btn btn-rose btn-sm" onclick="openEvolutionModal('${id}')">+ Agregar</button></div>${evolutions.length?evolutions.map(e=>`<div class="evol-row"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div style="flex:1;"><div class="evol-date">${fmtDate(e.date)}</div><div class="evol-clinic">${e.clinic||""}</div>${e.treatment?`<div style="font-size:11px;color:var(--text2);margin-bottom:4px;">Tratamiento: <b>${e.treatment}</b></div>`:""}<div style="font-size:13px;color:var(--text);line-height:1.5;">${e.text}</div></div><button class="btn btn-sm btn-danger" style="margin-left:8px;flex-shrink:0;" onclick="deleteEvolution('${id}','${e.id}')">✕</button></div></div>`).join(""):"<div class='empty-state'>Sin evoluciones</div>"}</div></div>
+  <div class="tab-panel" id="pt-abonos"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Control de abonos</div><button class="btn btn-rose btn-sm" onclick="openAbonoModal('${id}')">+ Agregar</button></div><div class="grid-3" style="margin-bottom:16px;"><div class="stat-card"><div class="stat-label">Presupuestado</div><div class="stat-value">${fmt(totalPr)}</div></div><div class="stat-card"><div class="stat-label">Abonado</div><div class="stat-value" style="color:var(--sage);">${fmt(totalAb)}</div></div><div class="stat-card"><div class="stat-label">Saldo pendiente</div><div class="stat-value" style="color:${saldo>0?"var(--danger)":"var(--sage)"};">${fmt(saldo)}</div></div></div>${abonos.length?abonos.map(a=>`<div class="abono-row"><div><div style="font-size:13px;font-weight:600;">${fmt(a.amount)}</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">${fmtDate(a.date)}${a.method?" · "+a.method:""}${a.note?" · "+a.note:""}</div></div><button class="btn btn-sm btn-danger" onclick="deleteAbono('${id}','${a.id}')">✕</button></div>`).join(""):"<div class='empty-state'>Sin abonos registrados</div>"}</div></div>
+  <div class="tab-panel" id="pt-xrays"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Radiografías</div><label class="btn btn-rose btn-sm" style="cursor:pointer;">+ Subir imagen<input type="file" accept="image/*" style="display:none;" onchange="uploadXray(event,'${id}')"></label></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">${xrays.length?xrays.map(x=>`<div style="position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);"><img src="${x.url}" style="width:100%;height:130px;object-fit:cover;cursor:pointer;display:block;" onclick="window.open('${x.url}')"><div style="padding:6px 8px;font-size:10px;color:var(--text3);font-weight:500;">${fmtDate(x.date)}</div><button class="btn btn-danger btn-sm" style="position:absolute;top:6px;right:6px;padding:2px 7px;background:rgba(255,255,255,0.9);" onclick="deleteXray('${id}','${x.id}')">✕</button></div>`).join(""):"<div class='empty-state' style='grid-column:1/-1;'>Sin radiografías</div>"}</div></div></div>`;
 };
 window.switchPTab=function(tab){document.querySelectorAll(".tab-btn").forEach((b,i)=>b.classList.toggle("active",["info","budgets","evolutions","abonos","xrays"][i]===tab));["info","budgets","evolutions","abonos","xrays"].forEach(t=>{const el=document.getElementById("pt-"+t);if(el)el.classList.toggle("active",t===tab);});};
-window.openEvolutionModal=function(patId){document.getElementById("modal-cita-title").textContent="Nueva evolución";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Fecha</label><input type="date" id="ev-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Clínica</label><select id="ev-clinic">${CLINICS.map(c=>`<option>${c}</option>`).join("")}</select></div><div class="field"><label>Tratamiento realizado</label><input type="text" id="ev-treatment" placeholder="Ej: Obturación pieza 2.6..."></div><div class="field"><label>Notas clínicas</label><textarea id="ev-text" rows="4" placeholder="Descripción de la sesión..."></textarea></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveEvolution('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
-window.saveEvolution=async function(patId){const data={date:document.getElementById("ev-date").value,clinic:document.getElementById("ev-clinic").value,treatment:document.getElementById("ev-treatment").value,text:document.getElementById("ev-text").value,createdAt:new Date().toISOString()};if(!data.text){alert("Ingresa las notas");return;}try{await addDoc(collection(db,"patients",patId,"evolutions"),data);closeModal("modal-cita");openPatient(patId);toast("✓ Evolución guardada");}catch(e){toast("⚠ Error");}};
-window.deleteEvolution=async function(patId,evId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"evolutions",evId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
-window.openAbonoModal=function(patId){document.getElementById("modal-cita-title").textContent="Registrar abono";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Monto (CLP)</label><input type="number" id="ab-amount" min="0"></div><div class="field"><label>Fecha</label><input type="date" id="ab-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Método de pago</label><select id="ab-method"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div><div class="field"><label>Nota</label><input type="text" id="ab-note"></div><div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-gold" style="flex:1;" onclick="saveAbono('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
+window.openEvolutionModal=function(patId){document.getElementById("modal-cita-title").textContent="Nueva evolución";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Fecha</label><input type="date" id="ev-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Clínica</label><select id="ev-clinic">${CLINICS.map(c=>`<option>${c}</option>`).join("")}</select></div><div class="field"><label>Tratamiento realizado</label><input type="text" id="ev-treatment" placeholder="Ej: Obturación pieza 2.6, Limpieza..."></div><div class="field"><label>Notas clínicas</label><textarea id="ev-text" rows="4" placeholder="Descripción de la sesión, observaciones..."></textarea></div><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-rose" style="flex:1;" onclick="saveEvolution('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
+window.saveEvolution=async function(patId){const data={date:document.getElementById("ev-date").value,clinic:document.getElementById("ev-clinic").value,treatment:document.getElementById("ev-treatment").value,text:document.getElementById("ev-text").value,createdAt:new Date().toISOString()};if(!data.text){alert("Ingresa las notas clínicas");return;}try{await addDoc(collection(db,"patients",patId,"evolutions"),data);closeModal("modal-cita");openPatient(patId);toast("✓ Evolución guardada");}catch(e){toast("⚠ Error");}};
+window.deleteEvolution=async function(patId,evId){if(!confirm("¿Eliminar esta evolución?"))return;try{await deleteDoc(doc(db,"patients",patId,"evolutions",evId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
+window.openAbonoModal=function(patId){document.getElementById("modal-cita-title").textContent="Registrar abono";document.getElementById("modal-cita-body").innerHTML=`<div class="field"><label>Monto (CLP)</label><input type="number" id="ab-amount" min="0" placeholder="0"></div><div class="field"><label>Fecha</label><input type="date" id="ab-date" value="${new Date().toISOString().split("T")[0]}"></div><div class="field"><label>Método de pago</label><select id="ab-method"><option>Efectivo</option><option>Transferencia</option><option>Débito</option><option>Crédito</option><option>Otro</option></select></div><div class="field"><label>Nota</label><input type="text" id="ab-note" placeholder="Ej: Abono tratamiento ortodoncia..."></div><div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-rose" style="flex:1;" onclick="saveAbono('${patId}')">Guardar</button><button class="btn" onclick="closeModal('modal-cita')">Cancelar</button></div>`;openModal("modal-cita");};
 window.saveAbono=async function(patId){const amount=parseFloat(document.getElementById("ab-amount").value)||0;if(!amount){alert("Ingresa el monto");return;}const data={amount,date:document.getElementById("ab-date").value,method:document.getElementById("ab-method").value,note:document.getElementById("ab-note").value,createdAt:new Date().toISOString()};try{await addDoc(collection(db,"patients",patId,"abonos"),data);closeModal("modal-cita");openPatient(patId);toast("✓ Abono registrado");}catch(e){toast("⚠ Error");}};
-window.deleteAbono=async function(patId,abId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"abonos",abId));openPatient(patId);toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
-window.uploadXray=async function(event,patId){const file=event.target.files[0];if(!file)return;toast("⟳ Subiendo...");try{const r=ref(storage,`xrays/${patId}/${Date.now()}_${file.name}`);await uploadBytes(r,file);const url=await getDownloadURL(r);await addDoc(collection(db,"patients",patId,"xrays"),{url,date:new Date().toISOString().split("T")[0],name:file.name,createdAt:new Date().toISOString()});openPatient(patId);toast("✓ Radiografía subida");}catch(e){toast("⚠ Error al subir");console.error(e);}};
-window.deleteXray=async function(patId,xId){if(!confirm("¿Eliminar?"))return;try{await deleteDoc(doc(db,"patients",patId,"xrays",xId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
+window.deleteAbono=async function(patId,abId){if(!confirm("¿Eliminar este abono?"))return;try{await deleteDoc(doc(db,"patients",patId,"abonos",abId));openPatient(patId);toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
+window.uploadXray=async function(event,patId){const file=event.target.files[0];if(!file)return;toast("⟳ Subiendo imagen...");try{const r=ref(storage,`xrays/${patId}/${Date.now()}_${file.name}`);await uploadBytes(r,file);const url=await getDownloadURL(r);await addDoc(collection(db,"patients",patId,"xrays"),{url,date:new Date().toISOString().split("T")[0],name:file.name,createdAt:new Date().toISOString()});openPatient(patId);toast("✓ Radiografía subida");}catch(e){toast("⚠ Error al subir");console.error(e);}};
+window.deleteXray=async function(patId,xId){if(!confirm("¿Eliminar esta radiografía?"))return;try{await deleteDoc(doc(db,"patients",patId,"xrays",xId));openPatient(patId);toast("✓ Eliminada");}catch(e){toast("⚠ Error");}};
 
 // BUDGET
 window.newBudgetForPatient=function(patId){showPage("nuevo-budget");setTimeout(()=>{const sel=document.getElementById("budget-patient-select");if(sel){sel.value=patId;selectBudgetPatient();}},100);};
-function populateBudgetPatientSelect(){const sel=document.getElementById("budget-patient-select");if(!sel)return;sel.innerHTML=`<option value="">— Seleccionar —</option>`+S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("");}
-window.selectBudgetPatient=function(){const id=document.getElementById("budget-patient-select").value;const info=document.getElementById("budget-patient-info");if(!id){info.style.display="none";return;}const pat=S.patients.find(p=>p.id===id);if(!pat)return;info.style.display="block";info.innerHTML=`<div style="font-weight:500;">${pat.name}</div><div style="font-size:12px;color:var(--text2);">${[pat.rut,pat.phone,pat.convenio].filter(Boolean).join(" · ")}</div>`;if(pat.convenio)document.getElementById("budget-convenio").value=pat.convenio;};
-function renderBudgetCatChips(){const el=document.getElementById("budget-cat-chips");if(!el)return;el.innerHTML=["all",...CATS].map(c=>`<span style="display:inline-block;padding:4px 10px;border-radius:var(--radius);font-size:12px;background:${S.budgetFilterCat===c?"var(--gold)":"var(--bg2)"};color:${S.budgetFilterCat===c?"#fff":"var(--text2)"};margin-right:4px;margin-bottom:6px;cursor:pointer;border:0.5px solid ${S.budgetFilterCat===c?"var(--gold)":"var(--border)"};" onclick="setBudgetCat('${c}')">${c==="all"?"Todos":c}</span>`).join("");}
+function populateBudgetPatientSelect(){const sel=document.getElementById("budget-patient-select");if(!sel)return;sel.innerHTML=`<option value="">— Seleccionar paciente —</option>`+S.patients.map(p=>`<option value="${p.id}">${p.name}</option>`).join("");}
+window.selectBudgetPatient=function(){const id=document.getElementById("budget-patient-select").value;const info=document.getElementById("budget-patient-info");if(!id){info.style.display="none";return;}const pat=S.patients.find(p=>p.id===id);if(!pat)return;info.style.display="block";info.innerHTML=`<div style="font-weight:600;color:var(--text);">${pat.name}</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">${[pat.rut,pat.phone,pat.convenio].filter(Boolean).join(" · ")}</div>`;if(pat.convenio)document.getElementById("budget-convenio").value=pat.convenio;};
+function renderBudgetCatChips(){const el=document.getElementById("budget-cat-chips");if(!el)return;el.innerHTML=["all",...CATS].map(c=>`<span style="display:inline-block;padding:4px 11px;border-radius:20px;font-size:11px;font-weight:500;background:${S.budgetFilterCat===c?"var(--rose)":"var(--bg)"};color:${S.budgetFilterCat===c?"#fff":"var(--text3)"};cursor:pointer;border:1.5px solid ${S.budgetFilterCat===c?"var(--rose)":"var(--border2)"};" onclick="setBudgetCat('${c}')">${c==="all"?"Todos":c}</span>`).join("");}
 window.setBudgetCat=function(c){S.budgetFilterCat=c;renderBudgetCatChips();renderBudgetProcList();};
-window.filterBudgetProcs=function(){S.budgetFilterText=document.getElementById("budget-proc-search")?.value?.toLowerCase()||"";renderBudgetProcList();};
-function renderBudgetProcList(){const filtered=S.priceList.filter(p=>(S.budgetFilterCat==="all"||p.cat===S.budgetFilterCat)&&(!S.budgetFilterText||p.name.toLowerCase().includes(S.budgetFilterText)));const el=document.getElementById("budget-proc-list");if(!el)return;if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:1rem;">Sin resultados</div>`;return;}el.innerHTML=filtered.map(p=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;cursor:pointer;border-bottom:0.5px solid var(--border);font-size:13px;" onclick="addBudgetLine('${p.id}')" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''"><div><div>${p.name}</div><div style="font-size:11px;color:var(--text3);">${p.cat}</div></div><div style="font-size:12px;color:var(--text2);white-space:nowrap;margin-left:8px;">${fmt(p.price)}</div></div>`).join("");}
-window.addBudgetLine=function(pid){const p=S.priceList.find(x=>x.id===pid);if(!p)return;S.budgetLines.push({lid:S.nextBudgetLineId++,name:p.name,price:p.price,qty:1,discount:0});renderBudgetLines();};
+window.filterBudgetProcs=function(){S.budgetFilterText=(document.getElementById("budget-proc-search")?.value||"").toLowerCase();renderBudgetProcList();};
+function renderBudgetProcList(){const filtered=S.priceList.filter(p=>(S.budgetFilterCat==="all"||p.cat===S.budgetFilterCat)&&(!S.budgetFilterText||p.name.toLowerCase().includes(S.budgetFilterText)));const el=document.getElementById("budget-proc-list");if(!el)return;if(!filtered.length){el.innerHTML=`<div class="empty-state" style="padding:1rem;">Sin resultados</div>`;return;}el.innerHTML=filtered.map(p=>`<div class="proc-item" onclick="addBudgetLine('${p.id}')"><div><div style="font-size:12px;color:var(--text);font-weight:500;">${p.name}</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">${p.cat}</div></div><div style="font-size:11px;color:var(--text2);white-space:nowrap;margin-left:8px;font-weight:500;">${fmt(p.price)}</div></div>`).join("");}
+window.toggleProcPicker=function(){S.procPickerOpen=!S.procPickerOpen;document.getElementById("proc-picker-panel").style.display=S.procPickerOpen?"block":"none";};
+window.addBudgetLine=function(pid){const p=S.priceList.find(x=>x.id===pid);if(!p)return;S.budgetLines.push({lid:S.nextBudgetLineId++,name:p.name,price:p.price,qty:1,discount:0,tooth:""});renderBudgetLines();};
 window.removeBudgetLine=function(lid){S.budgetLines=S.budgetLines.filter(l=>l.lid!==lid);renderBudgetLines();};
-window.updateBudgetLine=function(lid,field,val){const l=S.budgetLines.find(x=>x.lid===lid);if(!l)return;if(field==="qty")l.qty=Math.max(1,parseInt(val)||1);if(field==="discount")l.discount=Math.min(100,Math.max(0,parseFloat(val)||0));renderBudgetLines();};
-function renderBudgetLines(){const el=document.getElementById("budget-lines-area");const ta=document.getElementById("budget-totals-area");if(!S.budgetLines.length){el.innerHTML=`<div class="empty-state" style="padding:1.5rem;">Selecciona procedimientos</div>`;ta.style.display="none";return;}el.innerHTML=`<div class="bh-row"><div>Procedimiento</div><div style="text-align:center;">Cant.</div><div style="text-align:center;">Desc.%</div><div style="text-align:right;">Total</div><div></div></div>`+S.budgetLines.map(l=>{const base=l.price*l.qty,total=base*(1-l.discount/100),hd=l.discount>0;return`<div class="b-line"><div><div style="font-size:13px;">${l.name}</div><div style="font-size:11px;color:var(--text3);">${fmt(l.price)} c/u</div></div><input type="number" min="1" value="${l.qty}" onchange="updateBudgetLine(${l.lid},'qty',this.value)" style="padding:5px 6px;text-align:center;"><input type="number" min="0" max="100" value="${l.discount}" placeholder="0" onchange="updateBudgetLine(${l.lid},'discount',this.value)" style="padding:5px 6px;text-align:center;"><div style="text-align:right;">${hd?`<div class="lo">${fmt(base)}</div>`:""}<div class="lf${hd?" disc":""}">${fmt(total)}</div></div><button class="btn btn-danger btn-sm" style="padding:4px 6px;" onclick="removeBudgetLine(${l.lid})">✕</button></div>`;}).join("");let sub=0,tot=0;S.budgetLines.forEach(l=>{sub+=l.price*l.qty;tot+=l.price*l.qty*(1-l.discount/100);});const hd=sub!==tot;ta.style.display="block";ta.innerHTML=`<div class="totals-row"><div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Subtotal</div><div style="font-size:14px;font-weight:500;">${fmt(sub)}</div></div>${hd?`<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);">Descuento</div><div style="font-size:14px;font-weight:500;color:var(--danger);">-${fmt(sub-tot)}</div></div>`:""}<div style="text-align:right;"><div style="font-size:12px;color:var(--text2);font-weight:500;">Total</div><div style="font-size:17px;font-weight:600;color:${hd?"var(--success)":"var(--text)"};">${fmt(tot)}</div></div></div>`;}
+window.updateBudgetLine=function(lid,field,val){const l=S.budgetLines.find(x=>x.lid===lid);if(!l)return;if(field==="qty")l.qty=Math.max(1,parseInt(val)||1);else if(field==="discount")l.discount=Math.min(100,Math.max(0,parseFloat(val)||0));else if(field==="tooth")l.tooth=val;renderBudgetLines();};
+function renderBudgetLines(){
+  const el=document.getElementById("budget-lines-area");const ta=document.getElementById("budget-totals-area");
+  if(!S.budgetLines.length){el.innerHTML=`<div class="empty-state" style="padding:1.5rem;">Agrega prestaciones con el botón de arriba</div>`;ta.style.display="none";return;}
+  el.innerHTML=S.budgetLines.map(l=>{const base=l.price*l.qty,total=base*(1-l.discount/100),hd=l.discount>0;
+    return`<div class="b-line"><div><div style="font-size:12px;color:var(--text);font-weight:500;">${l.name}</div><div style="font-size:10px;color:var(--text3);margin-top:1px;">${fmt(l.price)} c/u</div></div><input type="text" value="${l.tooth||""}" placeholder="Ej: 2.6, 3.7" onchange="updateBudgetLine(${l.lid},'tooth',this.value)" style="font-size:11px;"><input type="number" min="1" value="${l.qty}" onchange="updateBudgetLine(${l.lid},'qty',this.value)"><input type="number" min="0" max="100" value="${l.discount}" placeholder="0" onchange="updateBudgetLine(${l.lid},'discount',this.value)"><div style="text-align:right;">${hd?`<div class="lo">${fmt(base)}</div>`:""}<div class="lf${hd?" disc":""}">${fmt(total)}</div></div><button class="btn btn-danger btn-sm" style="padding:4px 7px;" onclick="removeBudgetLine(${l.lid})">✕</button></div>`;}).join("");
+  let sub=0,tot=0;S.budgetLines.forEach(l=>{sub+=l.price*l.qty;tot+=l.price*l.qty*(1-l.discount/100);});const hd=sub!==tot;
+  ta.style.display="block";ta.innerHTML=`<div class="totals-row"><div style="text-align:right;"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:4px;">Subtotal</div><div style="font-size:15px;font-weight:600;color:var(--text);">${fmt(sub)}</div></div>${hd?`<div style="text-align:right;"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:4px;">Descuento</div><div style="font-size:15px;font-weight:600;color:var(--danger);">-${fmt(sub-tot)}</div></div>`:""}<div style="text-align:right;"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:4px;">Total</div><div style="font-size:20px;font-weight:700;color:${hd?"var(--sage)":"var(--text)"};">${fmt(tot)}</div></div></div>`;
+}
 function getBT(){let s=0,t=0;S.budgetLines.forEach(l=>{s+=l.price*l.qty;t+=l.price*l.qty*(1-l.discount/100);});return{subtotal:s,total:t,discount:s-t};}
-window.clearBudget=function(){S.budgetLines=[];S.nextBudgetLineId=1;renderBudgetLines();document.getElementById("budget-preview-section").style.display="none";document.getElementById("budget-obs").value="";const sel=document.getElementById("budget-patient-select");if(sel)sel.value="";const info=document.getElementById("budget-patient-info");if(info)info.style.display="none";};
-window.saveBudget=async function(){if(!S.budgetLines.length){alert("Agrega procedimientos");return;}const patId=document.getElementById("budget-patient-select").value;if(!patId){alert("Selecciona un paciente");return;}const{subtotal,total,discount}=getBT();const data={number:S.budgetCounter,date:document.getElementById("budget-date").value,convenio:document.getElementById("budget-convenio").value,validez:document.getElementById("budget-validez").value,obs:document.getElementById("budget-obs").value,lines:S.budgetLines.map(({lid,...r})=>r),subtotal,total,discount,patientId:patId,createdAt:new Date().toISOString()};try{await addDoc(collection(db,"patients",patId,"budgets"),data);await setDoc(doc(db,"config","budgetCounter"),{value:S.budgetCounter+1});S.budgetCounter++;toast("✓ Presupuesto guardado");previewBudget();}catch(e){toast("⚠ Error");console.error(e);}};
-function buildBudgetHTML(prof,pat,b){const{subtotal,total,discount,date,validez,convenio,obs,number,lines}=b;const hd=(discount||0)>0;const rows=(lines||[]).map(l=>{const lt=l.price*l.qty*(1-(l.discount||0)/100);return`<tr><td style="padding:8px 10px;border-bottom:0.5px solid #eee;">${l.name}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:center;">${l.qty}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:right;">${fmt(l.price)}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:center;">${l.discount>0?l.discount+"%":"—"}</td><td style="padding:8px 10px;border-bottom:0.5px solid #eee;text-align:right;font-weight:500;${l.discount>0?"color:#1a7a4a":""}">${fmt(lt)}</td></tr>`;}).join("");return`<div style="font-family:Arial,sans-serif;font-size:13px;color:#222;"><div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:16px;border-bottom:2px solid #b8952a;margin-bottom:20px;"><div><div style="font-size:22px;font-weight:700;color:#b8952a;">${prof.name||"Dra. Catalina Campos V."}</div><div style="font-size:12px;color:#888;margin-top:3px;text-transform:uppercase;letter-spacing:0.08em;">${prof.spec||"Cirujana Dentista"}</div>${prof.rut?`<div style="font-size:12px;color:#888;">RUT: ${prof.rut}</div>`:""}</div><div style="text-align:right;font-size:12px;color:#666;line-height:1.7;"><div style="font-size:15px;font-weight:700;color:#b8952a;">PRESUPUESTO Nº ${number||"—"}</div><div>Fecha: ${date?new Date(date+"T12:00:00").toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"}):""}</div><div>Válido por: ${validez||"30 días"}</div></div></div><div style="background:#fdf8ee;border-radius:6px;padding:12px 16px;margin-bottom:16px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b8952a;margin-bottom:6px;">Paciente</div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">${pat.name}</div><div style="font-size:12px;color:#666;">${[pat.rut?"RUT: "+pat.rut:"",pat.phone,pat.email].filter(Boolean).join(" · ")}</div>${convenio?`<div style="font-size:12px;color:#666;margin-top:3px;">Convenio: ${convenio}</div>`:""}</div><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#b8952a;"><th style="padding:8px 10px;text-align:left;font-size:11px;color:#fff;">Prestación</th><th style="padding:8px 10px;text-align:center;font-size:11px;color:#fff;width:50px;">Cant.</th><th style="padding:8px 10px;text-align:right;font-size:11px;color:#fff;width:110px;">Precio unit.</th><th style="padding:8px 10px;text-align:center;font-size:11px;color:#fff;width:65px;">Dcto.</th><th style="padding:8px 10px;text-align:right;font-size:11px;color:#fff;width:110px;">Total</th></tr></thead><tbody>${rows}</tbody></table><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid #ddd;"><div style="display:flex;justify-content:space-between;width:240px;font-size:13px;"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>${hd?`<div style="display:flex;justify-content:space-between;width:240px;font-size:13px;color:#a32d2d;"><span>Descuento</span><span>-${fmt(discount)}</span></div>`:""}<div style="display:flex;justify-content:space-between;width:240px;font-size:16px;font-weight:700;padding-top:8px;border-top:1.5px solid #b8952a;margin-top:4px;"><span>Total a pagar</span><span style="color:${hd?"#1a7a4a":"#222"}">${fmt(total)}</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;"><div style="border-top:1px solid #999;padding-top:6px;font-size:12px;color:#666;text-align:center;">${prof.name||"Dra. Catalina Campos V."}<br>${prof.spec||"Cirujana Dentista"}</div><div style="border-top:1px solid #999;padding-top:6px;font-size:12px;color:#666;text-align:center;">Firma Paciente y/o Apoderado</div></div>${obs?`<div style="margin-top:24px;background:#f5f5f5;padding:10px 12px;border-radius:4px;font-size:12px;"><b>Observaciones:</b> ${obs}</div>`:""}<div style="margin-top:24px;padding-top:12px;border-top:0.5px solid #ddd;font-size:11px;color:#999;text-align:center;">${prof.footer||"Presupuesto referencial."}</div></div>`;}
-window.previewBudget=function(){if(!S.budgetLines.length){alert("Agrega procedimientos primero");return;}const patId=document.getElementById("budget-patient-select").value;const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente",rut:"",phone:"",email:""};const{subtotal,total,discount}=getBT();const b={subtotal,total,discount,date:document.getElementById("budget-date").value,validez:document.getElementById("budget-validez").value,convenio:document.getElementById("budget-convenio").value,obs:document.getElementById("budget-obs").value,number:S.budgetCounter,lines:S.budgetLines};document.getElementById("budget-preview-content").innerHTML=buildBudgetHTML(S.profile,pat,b);document.getElementById("budget-preview-section").style.display="block";setTimeout(()=>document.getElementById("budget-preview-section").scrollIntoView({behavior:"smooth",block:"start"}),50);};
-window.downloadBudgetPDF=function(){genPDF(document.getElementById("budget-preview-content").innerHTML,`presupuesto_${S.budgetCounter}.pdf`);};
-window.downloadSavedPDF=function(bJson,patId){try{const b=JSON.parse(bJson.replace(/'/g,'"'));const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente"};genPDF(buildBudgetHTML(S.profile,pat,b),`presupuesto_${b.number}.pdf`);}catch(e){toast("⚠ Error al generar PDF");console.error(e);}};
-function genPDF(html,filename){const w=document.createElement("div");w.style.cssText="width:750px;padding:40px 48px;font-family:Arial,sans-serif;background:#fff;";w.innerHTML=html;document.body.appendChild(w);html2pdf().set({margin:0,filename,image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:"px",format:"a4",orientation:"portrait"}}).from(w).save().then(()=>document.body.removeChild(w));}
+window.clearBudget=function(){S.budgetLines=[];S.nextBudgetLineId=1;renderBudgetLines();document.getElementById("budget-preview-section").style.display="none";document.getElementById("budget-obs").value="";const sel=document.getElementById("budget-patient-select");if(sel)sel.value="";const info=document.getElementById("budget-patient-info");if(info)info.style.display="none";S.procPickerOpen=false;document.getElementById("proc-picker-panel").style.display="none";};
+window.saveBudget=async function(){if(!S.budgetLines.length){alert("Agrega al menos un procedimiento");return;}const patId=document.getElementById("budget-patient-select").value;if(!patId){alert("Selecciona un paciente");return;}const{subtotal,total,discount}=getBT();const data={number:S.budgetCounter,date:document.getElementById("budget-date").value,convenio:document.getElementById("budget-convenio").value,validez:document.getElementById("budget-validez").value,obs:document.getElementById("budget-obs").value,lines:S.budgetLines.map(({lid,...r})=>r),subtotal,total,discount,patientId:patId,createdAt:new Date().toISOString()};try{await addDoc(collection(db,"patients",patId,"budgets"),data);await setDoc(doc(db,"config","budgetCounter"),{value:S.budgetCounter+1});S.budgetCounter++;toast("✓ Presupuesto guardado");previewBudget();}catch(e){toast("⚠ Error al guardar");console.error(e);}};
+
+function buildBudgetHTML(prof,pat,b){
+  const{subtotal,total,discount,date,validez,convenio,obs,number,lines}=b;const hd=(discount||0)>0;
+  const rows=(lines||[]).map(l=>{const lt=l.price*l.qty*(1-(l.discount||0)/100);
+    return`<tr><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-size:13px;">${l.name}</td><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;font-size:12px;color:#888;">${l.tooth||"—"}</td><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:13px;">${l.qty}</td><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-size:13px;">${fmt(l.price)}</td><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;text-align:center;font-size:13px;">${l.discount>0?l.discount+"%":"—"}</td><td style="padding:9px 10px;border-bottom:1px solid #f0f0f0;text-align:right;font-weight:700;font-size:13px;${l.discount>0?"color:#5a8a6a":""}">${fmt(lt)}</td></tr>`;}).join("");
+  return`<div style="font-family:Arial,sans-serif;font-size:13px;color:#222;background:#fff;"><div style="display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:18px;border-bottom:1.5px solid #e8d0d2;margin-bottom:22px;"><div><div style="font-size:19px;font-weight:700;color:#1a1a1a;letter-spacing:0.01em;">${prof.name||"Dra. Catalina Campos V."}</div><div style="font-size:11px;color:#999;margin-top:4px;text-transform:uppercase;letter-spacing:0.1em;">${prof.spec||"Cirujana Dentista"}</div>${prof.rut?`<div style="font-size:11px;color:#999;margin-top:2px;">RUT: ${prof.rut}</div>`:""}</div><div style="text-align:right;"><div style="font-size:20px;font-weight:700;color:#c9767c;">Nº ${number||"—"}</div><div style="font-size:11px;color:#999;margin-top:5px;line-height:1.8;">Fecha: ${date?new Date(date+"T12:00:00").toLocaleDateString("es-CL",{day:"2-digit",month:"long",year:"numeric"}):""}<br>Válido por: ${validez||"30 días"}</div></div></div><div style="background:#fdf5f5;border-radius:6px;padding:12px 16px;margin-bottom:18px;border:1px solid #f0dfe0;"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#c9767c;margin-bottom:6px;">Paciente</div><div style="font-size:15px;font-weight:700;color:#1a1a1a;margin-bottom:3px;">${pat.name}</div><div style="font-size:11px;color:#888;">${[pat.rut?"RUT: "+pat.rut:"",pat.phone,pat.email].filter(Boolean).join(" · ")}</div>${convenio?`<div style="font-size:11px;color:#888;margin-top:2px;">Convenio: ${convenio}</div>`:""}</div><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:#1a1a1a;"><th style="padding:9px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#fff;">Prestación</th><th style="padding:9px 10px;text-align:left;font-size:10px;color:#fff;width:80px;">Pieza</th><th style="padding:9px 10px;text-align:center;font-size:10px;color:#fff;width:50px;">Cant.</th><th style="padding:9px 10px;text-align:right;font-size:10px;color:#fff;width:100px;">Precio unit.</th><th style="padding:9px 10px;text-align:center;font-size:10px;color:#fff;width:60px;">Dcto.</th><th style="padding:9px 10px;text-align:right;font-size:10px;color:#fff;width:100px;">Total</th></tr></thead><tbody>${rows}</tbody></table><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;margin-top:14px;padding-top:14px;border-top:1px solid #eee;"><div style="display:flex;justify-content:space-between;width:230px;font-size:12px;color:#888;"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>${hd?`<div style="display:flex;justify-content:space-between;width:230px;font-size:12px;color:#c44;"><span>Descuento</span><span>-${fmt(discount)}</span></div>`:""}<div style="display:flex;justify-content:space-between;width:230px;font-size:16px;font-weight:700;color:#1a1a1a;padding-top:10px;border-top:1.5px solid #e8d0d2;margin-top:4px;"><span>Total a pagar</span><span>${fmt(total)}</span></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-top:60px;"><div style="border-top:1px solid #ccc;padding-top:8px;font-size:11px;color:#888;text-align:center;">${prof.name||"Dra. Catalina Campos V."}<br>${prof.spec||"Cirujana Dentista"}</div><div style="border-top:1px solid #ccc;padding-top:8px;font-size:11px;color:#888;text-align:center;">Firma Paciente y/o Apoderado</div></div>${obs?`<div style="margin-top:22px;background:#f8f8f8;padding:10px 14px;border-radius:4px;font-size:11px;color:#666;line-height:1.6;"><b style="color:#333;">Observaciones: </b>${obs}</div>`:""}<div style="margin-top:22px;padding-top:10px;border-top:1px solid #f0f0f0;font-size:10px;color:#bbb;text-align:center;">${prof.footer||"Presupuesto referencial."}</div></div>`;
+}
+
+window.previewBudget=function(){if(!S.budgetLines.length){alert("Agrega al menos un procedimiento");return;}const patId=document.getElementById("budget-patient-select").value;const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente",rut:"",phone:"",email:""};const{subtotal,total,discount}=getBT();const b={subtotal,total,discount,date:document.getElementById("budget-date").value,validez:document.getElementById("budget-validez").value,convenio:document.getElementById("budget-convenio").value,obs:document.getElementById("budget-obs").value,number:S.budgetCounter,lines:S.budgetLines};document.getElementById("budget-preview-content").innerHTML=buildBudgetHTML(S.profile,pat,b);document.getElementById("budget-preview-section").style.display="block";setTimeout(()=>document.getElementById("budget-preview-section").scrollIntoView({behavior:"smooth",block:"start"}),50);};
+
+function genPDF(html,filename){
+  if(typeof html2pdf==="undefined"){alert("Librería PDF no disponible. Usa Ctrl+P para imprimir.");return;}
+  const el=document.createElement("div");el.style.cssText="position:fixed;left:-9999px;top:0;width:794px;background:#fff;font-family:Arial,sans-serif;padding:40px 48px;";el.innerHTML=html;document.body.appendChild(el);
+  html2pdf().set({margin:0,filename,image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",logging:false},jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}}).from(el).save().then(()=>{document.body.removeChild(el);toast("✓ PDF descargado");}).catch(e=>{if(document.body.contains(el))document.body.removeChild(el);console.error(e);alert("Usa Ctrl+P para imprimir como alternativa.");});
+}
+window.downloadBudgetPDF=function(){const c=document.getElementById("budget-preview-content");if(!c||!c.innerHTML){alert("Genera la vista previa primero");return;}const patId=document.getElementById("budget-patient-select").value;genPDF(c.innerHTML,`presupuesto_${S.budgetCounter}.pdf`);};
+window.downloadSavedPDF=function(bJson,patId){try{const b=JSON.parse(bJson.replace(/'/g,'"'));const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente"};genPDF(buildBudgetHTML(S.profile,pat,b),`presupuesto_${b.number||"0"}.pdf`);}catch(e){toast("⚠ Error al generar PDF");console.error(e);}};
 
 // PRICES
 let priceFormOpen=false;
 window.togglePriceForm=function(){priceFormOpen=!priceFormOpen;document.getElementById("price-new-form").style.display=priceFormOpen?"block":"none";if(priceFormOpen)document.getElementById("np-name").focus();};
-window.saveNewPrice=async function(){const name=document.getElementById("np-name").value.trim();const cat=document.getElementById("np-cat").value;const price=parseFloat(document.getElementById("np-price").value)||0;if(!name){alert("Ingresa el nombre");return;}try{const r=await addDoc(collection(db,"prices"),{name,cat,price});S.priceList.push({id:r.id,name,cat,price});document.getElementById("np-name").value="";document.getElementById("np-price").value="";togglePriceForm();renderPricesTable();renderBudgetProcList();toast("✓ Guardado");}catch(e){toast("⚠ Error");}};
-window.updatePrice=async function(id,field,val){const p=S.priceList.find(x=>x.id===id);if(!p)return;if(field==="price")p.price=parseFloat(val)||0;else p[field]=val;try{const{id:pid,...data}=p;await updateDoc(doc(db,"prices",pid),data);renderBudgetProcList();}catch(e){toast("⚠ Error");}};
-window.deletePrice=async function(id){if(!confirm("¿Eliminar?"))return;S.priceList=S.priceList.filter(p=>p.id!==id);try{await deleteDoc(doc(db,"prices",id));renderPricesTable();renderBudgetProcList();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
-function renderPricesTable(){const tbody=document.getElementById("prices-tbody");if(!tbody)return;const count=document.getElementById("prices-count");if(count)count.textContent=`(${S.priceList.length})`;tbody.innerHTML=S.priceList.map(p=>`<tr><td><input type="text" value="${p.name.replace(/"/g,"&quot;")}" style="border:none;background:transparent;font-size:13px;" onchange="updatePrice('${p.id}','name',this.value)"></td><td><select style="font-size:12px;padding:3px 6px;" onchange="updatePrice('${p.id}','cat',this.value)">${CATS.map(c=>`<option${c===p.cat?" selected":""}>${c}</option>`).join("")}</select></td><td style="text-align:right;"><input type="number" value="${p.price}" min="0" style="width:110px;text-align:right;border:none;background:transparent;" onchange="updatePrice('${p.id}','price',this.value)"></td><td><button class="btn btn-danger btn-sm" onclick="deletePrice('${p.id}')">🗑</button></td></tr>`).join("");}
+window.saveNewPrice=async function(){const name=document.getElementById("np-name").value.trim();const cat=document.getElementById("np-cat").value;const price=parseFloat(document.getElementById("np-price").value)||0;if(!name){alert("Ingresa el nombre");return;}try{const r=await addDoc(collection(db,"prices"),{name,cat,price});S.priceList.push({id:r.id,name,cat,price});document.getElementById("np-name").value="";document.getElementById("np-price").value="";togglePriceForm();renderPricesTable();renderBudgetProcList();toast("✓ Guardado en la nube");}catch(e){toast("⚠ Error");}};
+window.updatePrice=async function(id,field,val){const p=S.priceList.find(x=>x.id===id);if(!p)return;if(field==="price")p.price=parseFloat(val)||0;else p[field]=val;try{const{id:pid,...data}=p;await updateDoc(doc(db,"prices",pid),data);renderBudgetProcList();}catch(e){toast("⚠ Error al guardar");}};
+window.deletePrice=async function(id){if(!confirm("¿Eliminar este procedimiento?"))return;S.priceList=S.priceList.filter(p=>p.id!==id);try{await deleteDoc(doc(db,"prices",id));renderPricesTable();renderBudgetProcList();toast("✓ Eliminado");}catch(e){toast("⚠ Error");}};
+function renderPricesTable(){const tbody=document.getElementById("prices-tbody");if(!tbody)return;const count=document.getElementById("prices-count");if(count)count.textContent=`(${S.priceList.length} procedimientos)`;tbody.innerHTML=S.priceList.map(p=>`<tr><td><input type="text" value="${p.name.replace(/"/g,"&quot;")}" style="border:none;background:transparent;font-size:13px;color:var(--text);width:100%;" onchange="updatePrice('${p.id}','name',this.value)"></td><td><select style="font-size:11px;padding:4px 8px;" onchange="updatePrice('${p.id}','cat',this.value)">${CATS.map(c=>`<option${c===p.cat?" selected":""}>${c}</option>`).join("")}</select></td><td style="text-align:right;"><input type="number" value="${p.price}" min="0" style="width:110px;text-align:right;border:none;background:transparent;font-size:13px;color:var(--text);" onchange="updatePrice('${p.id}','price',this.value)"></td><td><button class="btn btn-danger btn-sm" onclick="deletePrice('${p.id}')">🗑</button></td></tr>`).join("");}
 
 // PROFILE
 function loadProfileForm(){const p=S.profile;["name","spec","rut","reg","phone","email","footer"].forEach(f=>{const el=document.getElementById("prof-"+f);if(el)el.value=p[f]||"";});}
-window.saveProfile=async function(){["name","spec","rut","reg","phone","email","footer"].forEach(f=>{const el=document.getElementById("prof-"+f);if(el)S.profile[f]=el.value;});try{await setDoc(doc(db,"config","profile"),S.profile);toast("✓ Perfil guardado");}catch(e){toast("⚠ Error");}};
+window.saveProfile=async function(){["name","spec","rut","reg","phone","email","footer"].forEach(f=>{const el=document.getElementById("prof-"+f);if(el)S.profile[f]=el.value;});try{await setDoc(doc(db,"config","profile"),S.profile);toast("✓ Perfil guardado");}catch(e){toast("⚠ Error al guardar");}};
 
 // INIT
 document.getElementById("budget-date").value=new Date().toISOString().split("T")[0];
 if(window.innerWidth<768)document.getElementById("menu-btn").style.display="block";
 window.addEventListener("resize",()=>{document.getElementById("menu-btn").style.display=window.innerWidth<768?"block":"none";});
-renderAgenda();
-renderClinicSelector();
+renderAgenda();renderAgendaLegend();
 loadAll();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 </body>
 </html>
