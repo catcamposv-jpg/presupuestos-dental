@@ -439,7 +439,7 @@ window.openPatient=async function(id){
   </div>
   <div class="tab-row"><button class="tab-btn active" onclick="switchPTab('info')">Ficha</button><button class="tab-btn" onclick="switchPTab('budgets')">Presupuestos</button><button class="tab-btn" onclick="switchPTab('evolutions')">Evoluciones</button><button class="tab-btn" onclick="switchPTab('abonos')">Abonos</button><button class="tab-btn" onclick="switchPTab('xrays')">Radiografías</button></div>
   <div class="tab-panel active" id="pt-info"><div class="card"><div class="card-title">Datos personales</div><div class="grid-2">${[["Nombre",pat.name],["RUT",pat.rut||"—"],["Nacimiento",pat.dob?fmtDate(pat.dob):"—"],["Sexo",pat.sex||"—"],["Teléfono",pat.phone||"—"],["Email",pat.email||"—"],["Dirección",pat.address||"—"],["Convenio",pat.convenio||"—"]].map(([l,v])=>`<div style="margin-bottom:12px;"><div style="font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:3px;">${l}</div><div style="font-size:13px;color:var(--text);">${v}</div></div>`).join("")}</div>${pat.medical?`<div style="margin-top:4px;"><div style="font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin-bottom:6px;">Antecedentes médicos</div><div style="background:var(--rose-light);border-left:3px solid var(--rose-mid);padding:12px 14px;border-radius:0 var(--radius) var(--radius) 0;font-size:13px;color:var(--text);line-height:1.6;">${pat.medical}</div></div>`:""}</div></div>
-  <div class="tab-panel" id="pt-budgets"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;"><div class="card-title" style="margin:0;">Presupuestos</div><span style="font-size:11px;color:var(--text3);">Total: <b style="color:var(--text);">${fmt(totalPr)}</b> · Abonado: <b style="color:var(--sage);">${fmt(totalAb)}</b> · Saldo: <b style="color:${saldo>0?"var(--danger)":"var(--sage)"};">${fmt(saldo)}</b></span></div>${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Prestaciones</th><th></th></tr></thead><tbody>${budgets.map(b=>`<tr><td><span class="badge badge-rose">Nº ${b.number||"—"}</span></td><td style="color:var(--text2);">${fmtDate(b.date)}</td><td style="font-weight:600;">${fmt(b.total||0)}</td><td style="font-size:11px;color:var(--text3);">${(b.lines||[]).map(l=>l.name).join(", ").substring(0,55)}</td><td><button class="btn btn-sm btn-outline-rose" onclick="downloadSavedPDF(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">PDF</button></td></tr>`).join("")}</tbody></table>`:"<div class='empty-state'>Sin presupuestos aún</div>"}</div></div>
+  <div class="tab-panel" id="pt-budgets"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;"><div class="card-title" style="margin:0;">Presupuestos</div><span style="font-size:11px;color:var(--text3);">Total: <b style="color:var(--text);">${fmt(totalPr)}</b> · Abonado: <b style="color:var(--sage);">${fmt(totalAb)}</b> · Saldo: <b style="color:${saldo>0?"var(--danger)":"var(--sage)"};">${fmt(saldo)}</b></span></div>${budgets.length?`<table class="table"><thead><tr><th>Nº</th><th>Fecha</th><th>Total</th><th>Prestaciones</th><th></th></tr></thead><tbody>${budgets.map(b=>`<tr><td><span class="badge badge-rose">Nº ${b.number||"—"}</span></td><td style="color:var(--text2);">${fmtDate(b.date)}</td><td style="font-weight:600;">${fmt(b.total||0)}</td><td style="font-size:11px;color:var(--text3);">${(b.lines||[]).map(l=>l.name).join(", ").substring(0,55)}</td><td style="display:flex;gap:6px;"><button class="btn btn-sm" onclick="viewBudgetDetail(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">Ver</button><button class="btn btn-sm btn-outline-rose" onclick="downloadSavedPDF(${JSON.stringify(b).replace(/"/g,"'")},'${id}')">PDF</button></td></tr>`).join("")}</tbody></table>`:"<div class='empty-state'>Sin presupuestos aún</div>"}</div></div>
   <div class="tab-panel" id="pt-evolutions"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Evoluciones clínicas</div><button class="btn btn-rose btn-sm" onclick="openEvolutionModal('${id}')">+ Agregar</button></div>${evolutions.length?evolutions.map(e=>`<div class="evol-row"><div style="display:flex;justify-content:space-between;align-items:flex-start;"><div style="flex:1;"><div class="evol-date">${fmtDate(e.date)}</div><div class="evol-clinic">${e.clinic||""}</div>${e.treatment?`<div style="font-size:11px;color:var(--text2);margin-bottom:4px;">Tratamiento: <b>${e.treatment}</b></div>`:""}<div style="font-size:13px;color:var(--text);line-height:1.5;">${e.text}</div></div><button class="btn btn-sm btn-danger" style="margin-left:8px;flex-shrink:0;" onclick="deleteEvolution('${id}','${e.id}')">✕</button></div></div>`).join(""):"<div class='empty-state'>Sin evoluciones</div>"}</div></div>
   <div class="tab-panel" id="pt-abonos"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Control de abonos</div><button class="btn btn-rose btn-sm" onclick="openAbonoModal('${id}')">+ Agregar</button></div><div class="grid-3" style="margin-bottom:16px;"><div class="stat-card"><div class="stat-label">Presupuestado</div><div class="stat-value">${fmt(totalPr)}</div></div><div class="stat-card"><div class="stat-label">Abonado</div><div class="stat-value" style="color:var(--sage);">${fmt(totalAb)}</div></div><div class="stat-card"><div class="stat-label">Saldo pendiente</div><div class="stat-value" style="color:${saldo>0?"var(--danger)":"var(--sage)"};">${fmt(saldo)}</div></div></div>${abonos.length?abonos.map(a=>`<div class="abono-row"><div><div style="font-size:13px;font-weight:600;">${fmt(a.amount)}</div><div style="font-size:11px;color:var(--text3);margin-top:2px;">${fmtDate(a.date)}${a.method?" · "+a.method:""}${a.note?" · "+a.note:""}</div></div><button class="btn btn-sm btn-danger" onclick="deleteAbono('${id}','${a.id}')">✕</button></div>`).join(""):"<div class='empty-state'>Sin abonos registrados</div>"}</div></div>
   <div class="tab-panel" id="pt-xrays"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="card-title" style="margin:0;">Radiografías</div><label class="btn btn-rose btn-sm" style="cursor:pointer;">+ Subir imagen<input type="file" accept="image/*" style="display:none;" onchange="uploadXray(event,'${id}')"></label></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;">${xrays.length?xrays.map(x=>`<div style="position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);"><img src="${x.url}" style="width:100%;height:130px;object-fit:cover;cursor:pointer;display:block;" onclick="window.open('${x.url}')"><div style="padding:6px 8px;font-size:10px;color:var(--text3);font-weight:500;">${fmtDate(x.date)}</div><button class="btn btn-danger btn-sm" style="position:absolute;top:6px;right:6px;padding:2px 7px;background:rgba(255,255,255,0.9);" onclick="deleteXray('${id}','${x.id}')">✕</button></div>`).join(""):"<div class='empty-state' style='grid-column:1/-1;'>Sin radiografías</div>"}</div></div></div>`;
@@ -488,22 +488,28 @@ function buildBudgetHTML(prof,pat,b){
 window.previewBudget=function(){if(!S.budgetLines.length){alert("Agrega al menos un procedimiento");return;}const patId=document.getElementById("budget-patient-select").value;const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente",rut:"",phone:"",email:""};const{subtotal,total,discount}=getBT();const b={subtotal,total,discount,date:document.getElementById("budget-date").value,validez:document.getElementById("budget-validez").value,convenio:document.getElementById("budget-convenio").value,obs:document.getElementById("budget-obs").value,number:S.budgetCounter,lines:S.budgetLines};document.getElementById("budget-preview-content").innerHTML=buildBudgetHTML(S.profile,pat,b);document.getElementById("budget-preview-section").style.display="block";setTimeout(()=>document.getElementById("budget-preview-section").scrollIntoView({behavior:"smooth",block:"start"}),50);};
 
 function genPDF(html,filename){
-  const win=window.open('','_blank');
-  if(!win){alert("Permite ventanas emergentes para descargar el PDF.");return;}
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${filename}</title>
-  <style>
-    body{font-family:Arial,sans-serif;font-size:13px;color:#222;padding:2cm;max-width:800px;margin:0 auto;}
-    table{width:100%;border-collapse:collapse;}
-    th{background:#1a1a1a;color:#fff;padding:9px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;}
-    td{padding:9px 10px;border-bottom:1px solid #f0f0f0;}
-    @media print{body{padding:1.5cm;}}
-    @page{margin:1.5cm;}
-  </style></head><body>${html}</body></html>`);
-  win.document.close();
-  win.focus();
-  setTimeout(()=>{win.print();},600);
+  const printArea=document.getElementById('print-area');
+  printArea.innerHTML=html;
+  printArea.style.display='block';
+  window.print();
+  setTimeout(()=>{printArea.style.display='none';printArea.innerHTML='';},1000);
 }
 window.downloadBudgetPDF=function(){const c=document.getElementById("budget-preview-content");if(!c||!c.innerHTML){alert("Genera la vista previa primero");return;}const patId=document.getElementById("budget-patient-select").value;genPDF(c.innerHTML,`presupuesto_${S.budgetCounter}.pdf`);};
+window.viewBudgetDetail=function(bJson,patId){
+  try{
+    const b=JSON.parse(bJson.replace(/'/g,'"'));
+    const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente"};
+    const html=buildBudgetHTML(S.profile,pat,b);
+    document.getElementById("modal-cita-title").textContent="Presupuesto Nº "+b.number;
+    document.getElementById("modal-cita-body").innerHTML=`
+      <div style="max-height:60vh;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);padding:1rem;background:#fff;color:#222;margin-bottom:12px;">${html}</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-rose btn-sm" onclick="downloadSavedPDF(${bJson},'${patId}')">🖨 Imprimir / PDF</button>
+        <button class="btn btn-sm" onclick="closeModal('modal-cita')">Cerrar</button>
+      </div>`;
+    openModal("modal-cita");
+  }catch(e){toast("⚠ Error al abrir presupuesto");console.error(e);}
+};
 window.downloadSavedPDF=function(bJson,patId){try{const b=JSON.parse(bJson.replace(/'/g,'"'));const pat=S.patients.find(p=>p.id===patId)||{name:"Paciente"};genPDF(buildBudgetHTML(S.profile,pat,b),`presupuesto_${b.number||"0"}.pdf`);}catch(e){toast("⚠ Error al generar PDF");console.error(e);}};
 
 // PRICES
@@ -525,6 +531,25 @@ window.addEventListener("resize",()=>{document.getElementById("menu-btn").style.
 renderAgenda();renderAgendaLegend();
 loadAll();
 </script>
+
+<div id="print-area" style="display:none;"></div>
+<style>
+@media print {
+  .sidebar,.topbar,.main { display:none !important; }
+  #print-area {
+    display:block !important;
+    font-family:Arial,sans-serif;
+    font-size:13px;
+    color:#222;
+    padding:1.5cm;
+    width:100%;
+  }
+  #print-area table { width:100%; border-collapse:collapse; }
+  #print-area th { background:#1a1a1a !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:9px 10px; font-size:10px; text-transform:uppercase; }
+  #print-area td { padding:9px 10px; border-bottom:1px solid #f0f0f0; }
+  @page { margin:1.5cm; }
+}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 </body>
 </html>
